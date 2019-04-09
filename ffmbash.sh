@@ -52,6 +52,8 @@ then
     exit 0
 fi
 
+#! Next try a short recording locally to check if the chosen parameters fit.
+#! @todo Use a simpler format with a small footprint, it's actually only to check on the framerate.
 i=0
 fpsok=true
 echo ""
@@ -73,7 +75,6 @@ if [ "$fpsok" = false ]; then
     echo "Select a framerate:"
     read myframerate
     echo "${framerate[$myframerate]}"
-
 fi
 IFS=SAVEIFS
 
