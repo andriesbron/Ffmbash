@@ -4,7 +4,7 @@
 User friendly bash bash script wrapper for using ffmpeg on MacOS with livestreaming.
 Currently work in progress, see the "eval command" line at the bottom, at this moment, you can modify that one easily for own use.
 
-
+```
 Ffmbash is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -17,3 +17,4 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Radenium.  If not, see <http://www.gnu.org/licenses/>.
+```
