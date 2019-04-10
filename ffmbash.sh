@@ -71,15 +71,38 @@ for line in $(ffmpeg -y -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0
     fi
 done
 
+setframerate=""
 if [ "$fpsok" = false ]; then
     echo "Select a framerate:"
     read myframerate
     echo "${framerate[$myframerate]}"
+
+    IFS=$'   '
+
+    for part in ${framerate[$myframerate]}; do
+        echo ${part}
+        if [[ ${part} == *"fps"* ]]; then
+            #! 30.000000]fps something like this
+            IFS=$'.'
+            counter=0
+            for npart in ${part}; do
+                if [ $counter -eq 0 ]; then
+                    newframerate=${npart}
+                fi
+                counter=$((counter+1))
+                echo ${npart}
+            done
+        fi
+    done
 fi
 IFS=SAVEIFS
 
+setframerate="-framerate  $newframerate"
+
+echo $setframerate
+echo "I found framerate "$newframerate
 echo ""
 echo "Selected video device "$vdev", selected audio device "$adev"."
 echo "Starting streaming, enter q to quit..."
-ffmpeg -y -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
+ffmpeg -y  -f avfoundation "-$setframerate" -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
 
