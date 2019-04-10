@@ -87,24 +87,23 @@ if [ "$fpsok" = false ]; then
             counter=0
             for npart in ${part}; do
                 if [ $counter -eq 0 ]; then
-                    newframerate=${npart}
+                    setframerate="-framerate ${npart}"
                 fi
                 counter=$((counter+1))
                 echo ${npart}
             done
         fi
     done
-    setframerate="-framerate  $newframerate"
 fi
 IFS=SAVEIFS
 
-
-
-echo $setframerate
-echo "I found framerate "$newframerate
 echo ""
 echo "Selected video device "$vdev", selected audio device "$adev"."
 echo "Starting streaming, enter q to quit..."
-ffmpeg -y  -f avfoundation "-${setframerate}" -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
-#ffmpeg -y  -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
+echo 
 
+#! @bug Command below does not work, it breaks its neck over ${setframerate} while "${vdev}:${adev}" works. Need to use eval.
+#ffmpeg -y ${setframerate} -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
+
+command="ffmpeg -y ${setframerate} -f avfoundation -i \"${vdev}:${adev}\" -c:v libx264 -crf 0 -preset ultrafast test.m3u8"
+eval $command
