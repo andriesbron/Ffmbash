@@ -34,6 +34,8 @@ echo "Select destiny of stream (empty=File):"
 echo ""
 echo "Set your media devices for livestreaming:"
 echo ""
+
+#! Display all available media device for selection:
 SAVEIFS=IFS
 IFS=$'\n'
 for line in $(ffmpeg -f avfoundation -list_devices true -i “” 2>&1); do
@@ -57,6 +59,7 @@ read vdev
 echo "Select the audio device (number) you want to use (leave empty for none):"
 read adev
 
+#! If no media device is selected, exit the script
 if [ -z $adev ] && [ -z $vdev ] #! Works or [ ! -z $vdev ] means not empty.
 then
     echo "Sorry, you must select either or both a video or audio device, thank you for using ffmbash."
@@ -65,7 +68,8 @@ then
     exit 0
 fi
 
-#! Next try a short recording locally to check if the chosen parameters fit.
+#! Launch ffmpeg and find out if the camera is starting instead of complaining about framerates
+
 i=0
 fpsok=true
 echo ""
@@ -84,14 +88,14 @@ for line in $(ffmpeg -y -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0
     fi
 done
 
+#! Initially, don't set a framerate, if, however framerate issues, fpsok is false and the next commands obtains a proper framerate setting from the user.
 setframerate=""
 if [ "$fpsok" = false ]; then
     echo "Select a framerate:"
     read myframerate
     echo "${framerate[$myframerate]}"
-
+    #! Perform some serious parsing...
     IFS=$'   '
-
     for part in ${framerate[$myframerate]}; do
         echo ${part}
         if [[ ${part} == *"fps"* ]]; then
