@@ -94,15 +94,17 @@ if [ "$fpsok" = false ]; then
             done
         fi
     done
+    setframerate="-framerate  $newframerate"
 fi
 IFS=SAVEIFS
 
-setframerate="-framerate  $newframerate"
+
 
 echo $setframerate
 echo "I found framerate "$newframerate
 echo ""
 echo "Selected video device "$vdev", selected audio device "$adev"."
 echo "Starting streaming, enter q to quit..."
-ffmpeg -y  -f avfoundation "-$setframerate" -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
+#ffmpeg -y  -f avfoundation "-$setframerate" -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
+ffmpeg -y  -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
 
