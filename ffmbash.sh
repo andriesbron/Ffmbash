@@ -53,12 +53,12 @@ then
 fi
 
 #! Next try a short recording locally to check if the chosen parameters fit.
-#! @todo Use a simpler format with a small footprint, it's actually only to check on the framerate.
 i=0
 fpsok=true
 echo ""
 echo "Trying stream for 1 second, one moment please..."
-for line in $(ffmpeg -y -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast -t 00:00:00.100 test.m3u8 2>&1); do
+#for line in $(ffmpeg -y -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast -t 00:00:00.100 test.m3u8 2>&1); do
+for line in $(ffmpeg -y -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast -t 00:00:00.100 null 2>&1); do
     if [[ ${line} == *"is not supported by the device"* ]]; then
         fpsok=false
         echo ""
