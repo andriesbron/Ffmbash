@@ -23,7 +23,7 @@ IFS="="
 while read -r name value
 do
     echo "Content of $name is ${value//\"/}"
-done < templates/config.txt
+done < templates/hls_file.txt
 
 IFS=SAVEIFS
 
