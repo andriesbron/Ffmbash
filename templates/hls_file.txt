@@ -1,0 +1,4 @@
+VDEV=0
+ADEV=0
+FPSIN=30
+
