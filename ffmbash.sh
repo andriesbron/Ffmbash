@@ -93,11 +93,10 @@ setframerate=""
 if [ "$fpsok" = false ]; then
     echo "Select a framerate:"
     read myframerate
-    echo "${framerate[$myframerate]}"
+    #! echo "${framerate[$myframerate]}"
     #! Perform some serious parsing...
     IFS=$'   '
     for part in ${framerate[$myframerate]}; do
-        echo ${part}
         if [[ ${part} == *"fps"* ]]; then
             #! 30.000000]fps something like this
             IFS=$'.'
@@ -107,7 +106,6 @@ if [ "$fpsok" = false ]; then
                     setframerate="-framerate ${npart}"
                 fi
                 counter=$((counter+1))
-                echo ${npart}
             done
         fi
     done
