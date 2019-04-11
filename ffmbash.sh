@@ -17,6 +17,16 @@ echo "WGET call:"
 content=$(wget http://localhost:8888/service.php -q -O -)
 echo $content
 
+#if a template file is given, read the template and start if autostart is set.
+SAVEIFS=IFS
+IFS="="
+while read -r name value
+do
+    echo "Content of $name is ${value//\"/}"
+done < templates/config.txt
+
+
+
 echo ""
 echo "Protocols"
 echo "0 HLS"
