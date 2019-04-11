@@ -25,7 +25,7 @@ do
     echo "Content of $name is ${value//\"/}"
 done < templates/config.txt
 
-
+IFS=SAVEIFS
 
 echo ""
 echo "Protocols"
