@@ -1,7 +1,7 @@
 # ffmbash
 ```MacOS```
 
-User friendly bash bash script wrapper for using ffmpeg on MacOS with livestreaming.
+User friendly bash bash script wrapper for livestreaming with ffmpeg on MacOS.
 Currently work in progress, see the "eval command" line at the bottom, at this moment, you can modify that one easily for own use.
 
 ```
