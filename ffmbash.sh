@@ -19,33 +19,53 @@ echo $content
 
 
 # Initialize variables:
-autostart=true
+autostart=0
 output_file=""
+output_dir=$(date +%Y%m%dT%H%M%S)
 verbose=0
 template_file=""
+FPSIN=""
+
+echo ${output_dir}
+#output_dir=$(date +%Y%m%d)
+#mkdir -p  /home/app/logs/"$foldername"
+#sh sample.sh > /home/app/logs/"$foldername"/test$(date +%Y%m%d%H%M%S).log
 
 function show_help {
+    echo "NAME"
+    echo "    ffmbash start a livestream using ffmpeg (must be installed)."
     echo "./ffmbash -t hls_file loads hls_file template."
+    echo "A configuration file overrules a command line argument."
+    echo ""
+    echo "-a Stream starts directly"
+    echo "-t [template name]"
+
 }
 
-while getopts "h?vt:" opt; do
-case "$opt" in
-h|\?)
-show_help
-exit 0
-;;
-v)  verbose=1
-;;
-t)  template_file=$OPTARG
-;;
-esac
+while getopts "h?avt:o:r:" opt; do
+    case "$opt" in
+        h|\?)
+        show_help
+        exit 0
+        ;;
+        a)  autostart=1
+        ;;
+        v)  verbose=1
+        ;;
+        t)  template_file=$OPTARG
+        ;;
+        o)  output_file=$OPTARG
+        ;;
+        r)  FPSIN=$OPTARG
+        ;;
+    esac
 done
 
 shift $((OPTIND-1))
 
 [ "${1:-}" = "--" ] && shift
 
-echo "verbose=$verbose, template_file='$template_file', Leftovers: $@"
+echo "autostart=$autostart, verbose=$verbose, template_file='$template_file', output_file='$output_file', FPSIN=$FPSIN, Leftovers: $@"
 
 #! @todo Load only the configuration file if the option is given -t hls_file
 
@@ -69,15 +89,8 @@ if [ ! -z $template_file ]; then
     done < templates/$template_file.txt
     IFS=SAVEIFS
 fi
-#! @todo At this point overrule the configuration file with command line parameters.
 
-if [[ ${FPSIN} == "" ]]; then
-    ffmbashfpsin=""
-else
-    ffmbashfpsin="-framerate ${FPSIN}"
-fi
-
-
+#! Setting the devices
 if [ -z $ADEV ] && [ -z $VDEV ]; then
     echo ""
     echo "Set your media devices for livestreaming:"
@@ -115,8 +128,13 @@ if [ -z $ADEV ] && [ -z $VDEV ]; then
     fi
 fi
 
-
-
+#! @todo ffmbashfpsin should be set later, instead, handle FPSIN here, e.g. FPSIN=${npart}.
+#! Setting the framerate
+if [[ ${FPSIN} == "" ]]; then
+    ffmbashfpsin=""
+else
+    ffmbashfpsin="-framerate ${FPSIN}"
+fi
 if [ -z $ffmbashfpsin ]; then
     #! If the framerate is not set then a check is performed if the default framerate is working.
     SAVEIFS=IFS
@@ -168,9 +186,10 @@ echo "Video device: "$VDEV
 echo "Audio device: "$ADEV
 echo "Framerate   : "${ffmbashfpsin}
 echo ""
-echo "Press <enter> to starting streaming. Once started, press enter <q> to quit."
+#if [ "$autostart" = false ]; then
 
-if [ "$autostart" = false ]; then
+if [ $autostart -eq 0 ]; then
+    echo "Press <enter> to starting streaming. Once started, press enter <q> to quit."
     read startstreaming
 fi
 
@@ -179,6 +198,6 @@ fi
 
 #command="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${VDEV}:${ADEV}\" -c:v libx264 -crf 0 -preset ultrafast test.m3u8"
 #eval $command
-
-COMMAND="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${VDEV}:${ADEV}\" -c:v libx264 -crf 0 -preset ultrafast test.m3u8"
+mkdir -p  streams/"$output_dir"
+COMMAND="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${VDEV}:${ADEV}\" -c:v libx264 -crf 0 -preset ultrafast streams/${output_dir}/test.m3u8"
 eval $COMMAND
