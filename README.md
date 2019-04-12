@@ -5,19 +5,24 @@
 
 User friendly bash bash script wrapper for livestreaming with ffmpeg on MacOS.
 
-## To guide you through selections
+- To guide you through selections
 
+```
 ./ffmbash.sh
+```
 
-## Load with a template file
+- Load with a template file
 
+```
 ./ffmbash.sh -t hls_file
+```
 
-## Displays more help
+- Displays more help
 
+```
 ./ffmbash.sh -h
-
-
+```
+# License
 ```
 Ffmbash is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
