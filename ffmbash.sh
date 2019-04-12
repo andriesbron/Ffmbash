@@ -12,6 +12,9 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Ffmbash.  If not, see <http://www.gnu.org/licenses/>.
+bold=$(tput bold)
+normal=$(tput sgr0)
+
 
 echo "WGET call:"
 content=$(wget http://localhost:8888/service.php -q -O -)
@@ -32,14 +35,30 @@ echo ${output_dir}
 #sh sample.sh > /home/app/logs/"$foldername"/test$(date +%Y%m%d%H%M%S).log
 
 function show_help {
-    echo "NAME"
-    echo "    ffmbash start a livestream using ffmpeg (must be installed)."
-    echo "./ffmbash -t hls_file loads hls_file template."
-    echo "A configuration file overrules a command line argument."
     echo ""
-    echo "-a Stream starts directly"
-    echo "-t [template name]"
-
+    echo ""
+    echo ""
+    echo "    ******* ffmbash HELP *******"
+    echo ""
+    echo "    ${bold}NAME:${normal}"
+    echo "    ffmbash start a livestream using ffmpeg (must be installed)."
+    echo ""
+    echo "    ${bold}USAGE:${normal}"
+    echo "    ./ffmbash.sh [options]"
+    echo ""
+    echo "    ${bold}OPTIONS:${normal}"
+    echo "    ${bold}-a${normal} Auto starts the livestream."
+    echo "    ${bold}-t [template name]${normal} Loads a template with settings from the templates directory. Overrules any command line option."
+    echo ""
+    echo "    ${bold}AVAILABLE TEMPLATES${normal}"
+    echo "    ${bold}hls_file${normal} Streams HLS to a file."
+    echo "    Or... make your own and store them into the templates directory."
+    echo ""
+    echo "    ${bold}TRY SOMETHING?${normal}"
+    echo "    ${bold}./ffmbash.sh${normal}    Guides you through all the options"
+    echo ""
+    echo ""
+    echo ""
 }
 
 while getopts "h?avt:o:r:" opt; do
