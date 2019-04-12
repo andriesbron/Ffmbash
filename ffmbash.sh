@@ -17,29 +17,58 @@ echo "WGET call:"
 content=$(wget http://localhost:8888/service.php -q -O -)
 echo $content
 
+
+# Initialize variables:
 autostart=true
+output_file=""
+verbose=0
+template_file=""
+
+function show_help {
+    echo "./ffmbash -t hls_file loads hls_file template."
+}
+
+while getopts "h?vt:" opt; do
+case "$opt" in
+h|\?)
+show_help
+exit 0
+;;
+v)  verbose=1
+;;
+t)  template_file=$OPTARG
+;;
+esac
+done
+
+shift $((OPTIND-1))
+
+[ "${1:-}" = "--" ] && shift
+
+echo "verbose=$verbose, template_file='$template_file', Leftovers: $@"
 
 #! @todo Load only the configuration file if the option is given -t hls_file
 
 #if a template file is given, read the template and start if autostart is set.
-SAVEIFS=IFS
-IFS="="
-while read -r name value
-do
-    #echo "Content of $name is ${value//\"/}"
-    #! Due to lack of associative arrays:
-    case "$name" in
-        'ADEV') ADEV=$value;;
-        'VDEV') VDEV=$value;; 
-        'DTSTART') DTSTART=$value;;
-        'DTSTOP') DTSTOP=$value;; 
-        'FPSIN') FPSIN=$value;;
-        'COMMAND') FPSIN=$value;; 
-        *);;
-    esac
-done < templates/hls_file.txt
-IFS=SAVEIFS
-
+if [ ! -z $template_file ]; then
+    SAVEIFS=IFS
+    IFS="="
+    while read -r name value
+    do
+        #echo "Content of $name is ${value//\"/}"
+        #! Due to lack of associative arrays:
+        case "$name" in
+            'ADEV') ADEV=$value;;
+            'VDEV') VDEV=$value;;
+            'DTSTART') DTSTART=$value;;
+            'DTSTOP') DTSTOP=$value;;
+            'FPSIN') FPSIN=$value;;
+            'COMMAND') FPSIN=$value;;
+            *);;
+        esac
+    done < templates/$template_file.txt
+    IFS=SAVEIFS
+fi
 #! @todo At this point overrule the configuration file with command line parameters.
 
 if [[ ${FPSIN} == "" ]]; then
@@ -135,8 +164,8 @@ fi
 
 echo ""
 echo "Settings"
-echo "Video device: "$vdev
-echo "Audio device: "$adev
+echo "Video device: "$VDEV
+echo "Audio device: "$ADEV
 echo "Framerate   : "${ffmbashfpsin}
 echo ""
 echo "Press <enter> to starting streaming. Once started, press enter <q> to quit."
