@@ -17,9 +17,9 @@ echo "WGET call:"
 content=$(wget http://localhost:8888/service.php -q -O -)
 echo $content
 
-
 autostart=true
 
+#! @todo Load only the configuration file if the option is given -t hls_file
 
 #if a template file is given, read the template and start if autostart is set.
 SAVEIFS=IFS
@@ -40,6 +40,7 @@ do
 done < templates/hls_file.txt
 IFS=SAVEIFS
 
+#! @todo At this point overrule the configuration file with command line parameters.
 
 if [[ ${FPSIN} == "" ]]; then
     ffmbashfpsin=""
