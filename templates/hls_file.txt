@@ -1,9 +1,11 @@
+AUTOSTART=0
 VDEV=0
 ADEV=0
-VDEVNAME=Camera such or so
-ADEVNAME=audio such or so
+VDEVNAME=Camera_such_or_so
+ADEVNAME=AudioDev
 FPSIN=30
 DTSTART=21-02-2016T19:00:00
 DTSTOP=21-02-2016T23:00:00
-
-
+#COMMAND=apple_hls
+#COMMAND=hls
+#COMMAND=youtube
