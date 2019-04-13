@@ -1,9 +1,15 @@
 # ffmbash
 ```MacOS```
 
-[Work in progress]
+[ffmbash is a work in progress, the current status is a useful prototype]
 
 User friendly bash bash script wrapper for livestreaming with ffmpeg on MacOS.
+
+# Modify
+
+See templates directory and the commands directory. The naming in the template is different from the commands, however, the relation is obvious. Create your own template file and command and load it with ffmbash command line options.
+
+# Usage
 
 
 - To guide you through selections, type
