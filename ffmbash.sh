@@ -22,12 +22,15 @@ echo $content
 
 
 # Initialize variables:
-autostart=0
+ff_screen_resolution=650x360
+ff_rootdir=videos
+ff_command=apple_hls
+ff_autostart=0
 output_file=""
 output_dir=$(date +%Y%m%dT%H%M%S)
 verbose=0
 template_file=""
-FPSIN=""
+ff_fps=""
 
 echo ${output_dir}
 #output_dir=$(date +%Y%m%d)
@@ -35,30 +38,7 @@ echo ${output_dir}
 #sh sample.sh > /home/app/logs/"$foldername"/test$(date +%Y%m%d%H%M%S).log
 
 function show_help {
-    echo ""
-    echo ""
-    echo ""
-    echo "    ******* ffmbash HELP *******"
-    echo ""
-    echo "    ${bold}NAME:${normal}"
-    echo "    ffmbash start a livestream using ffmpeg (must be installed)."
-    echo ""
-    echo "    ${bold}USAGE:${normal}"
-    echo "    ./ffmbash.sh [options]"
-    echo ""
-    echo "    ${bold}OPTIONS:${normal}"
-    echo "    ${bold}-a${normal} Auto starts the livestream."
-    echo "    ${bold}-t [template name]${normal} Loads a template with settings from the templates directory. Overrules any command line option."
-    echo ""
-    echo "    ${bold}AVAILABLE TEMPLATES${normal}"
-    echo "    ${bold}hls_file${normal} Streams HLS to a file."
-    echo "    Or... make your own and store them into the templates directory."
-    echo ""
-    echo "    ${bold}TRY SOMETHING?${normal}"
-    echo "    ${bold}./ffmbash.sh${normal}    Guides you through all the options"
-    echo ""
-    echo ""
-    echo ""
+. modules/help.sh
 }
 
 while getopts "h?avt:o:r:" opt; do
@@ -75,7 +55,7 @@ while getopts "h?avt:o:r:" opt; do
         ;;
         o)  output_file=$OPTARG
         ;;
-        r)  FPSIN=$OPTARG
+        r)  ff_fps=$OPTARG
         ;;
     esac
 done
@@ -84,7 +64,7 @@ shift $((OPTIND-1))
 
 [ "${1:-}" = "--" ] && shift
 
-echo "autostart=$autostart, verbose=$verbose, template_file='$template_file', output_file='$output_file', FPSIN=$FPSIN, Leftovers: $@"
+echo "autostart=$autostart, verbose=$verbose, template_file='$template_file', output_file='$output_file', ff_fps=$ff_fps, Leftovers: $@"
 
 #! @todo Load only the configuration file if the option is given -t hls_file
 
@@ -97,20 +77,43 @@ if [ ! -z $template_file ]; then
         #echo "Content of $name is ${value//\"/}"
         #! Due to lack of associative arrays:
         case "$name" in
-            'ADEV') ADEV=$value;;
-            'VDEV') VDEV=$value;;
-            'DTSTART') DTSTART=$value;;
-            'DTSTOP') DTSTOP=$value;;
-            'FPSIN') FPSIN=$value;;
-            'COMMAND') FPSIN=$value;;
+            'AUTOSTART') ff_autostart=$value;;
+            'ADEV') ff_adev=$value;;
+            'VDEV') ff_vdev=$value;;
+            'ADEVNAME') ff_adevname=$value;;
+            'VDEVNAME') ff_vdevname=$value;;
+            'DTSTART') ff_dtstart=$value;;
+            'DTSTOP') ff_dtstop=$value;;
+            'FPSIN') ff_fps=$value;;
+            'COMMAND') ff_command=$value;;
+            'SCREENRES') ff_screen_resolution=$value;;
+            
+            'RTSP_USER_NAME') ff_rtsp_user_name=$value;;
+            'RTSP_USER_PASSWORD') ff_rtsp_user_password=$value;;
+            'RTSP_SERVER_URL') ff_rtsp_server_url=$value;;
+            'RTSP_SERVER_PORT') ff_rtsp_server_port=$value;;
+            'RTSP_KEY') ff_rtsp_key=$value;;
+            
             *);;
         esac
     done < templates/$template_file.txt
     IFS=SAVEIFS
 fi
 
+echo "Komt ie"
+echo $ff_vdev
+echo $ff_adev
+echo $ff_screen_resolution
+echo $ff_vdevname
+echo $ff_adevname
+echo $ff_dtstart
+echo $ff_command
+echo "Was ie"
+
+#exit 0
+
 #! Setting the devices
-if [ -z $ADEV ] && [ -z $VDEV ]; then
+if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
     echo ""
     echo "Set your media devices for livestreaming:"
     echo ""
@@ -134,12 +137,12 @@ if [ -z $ADEV ] && [ -z $VDEV ]; then
     IFS=SAVEIFS
     echo ""
     echo "Select the video device (number) you want to use (leave empty for none):"
-    read VDEV
+    read ff_vdev
     echo "Select the audio device (number) you want to use (leave empty for none):"
-    read ADEV
+    read ff_adev
     #! If no media device is selected, exit the script
     #! Works or [ ! -z $vdev ] means not empty.
-    if [ -z $ADEV ] && [ -z $VDEV ]; then
+    if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
         echo "Sorry, you must select either or both a video or audio device, thank you for using ffmbash."
         echo ""
         echo ""
@@ -147,12 +150,12 @@ if [ -z $ADEV ] && [ -z $VDEV ]; then
     fi
 fi
 
-#! @todo ffmbashfpsin should be set later, instead, handle FPSIN here, e.g. FPSIN=${npart}.
+#! @todo ffmbashfpsin should be set later, instead, handle ff_fps here, e.g. ff_fps=${npart}.
 #! Setting the framerate
-if [[ ${FPSIN} == "" ]]; then
+if [[ ${ff_fps} == "" ]]; then
     ffmbashfpsin=""
 else
-    ffmbashfpsin="-framerate ${FPSIN}"
+    ffmbashfpsin="-framerate ${ff_fps}"
 fi
 if [ -z $ffmbashfpsin ]; then
     #! If the framerate is not set then a check is performed if the default framerate is working.
@@ -163,7 +166,7 @@ if [ -z $ffmbashfpsin ]; then
     
     i=0
     fpsok=true
-    for line in $(ffmpeg -y -f avfoundation -i "${VDEV}:${ADEV}" -c:v libx264 -crf 0 -preset ultrafast -t 00:00:00.100 null 2>&1); do
+    for line in $(ffmpeg -y -f avfoundation -i "${ff_vdev}:${ff_adev}" -c:v libx264 -crf 0 -preset ultrafast -t 00:00:00.100 null 2>&1); do
         if [[ ${line} == *"is not supported by the device"* ]]; then
             fpsok=false
         fi
@@ -198,25 +201,26 @@ if [ -z $ffmbashfpsin ]; then
     fi
     IFS=SAVEIFS
 fi
+if [ -z $ff_command ]; then
+    echo "Enter ffmpeg command to use (name of file without extension in the command directory):"
+    read ff_command
+fi
 
 echo ""
-echo "Settings"
-echo "Video device: "$VDEV
-echo "Audio device: "$ADEV
-echo "Framerate   : "${ffmbashfpsin}
+echo "${bold}Settings${normal}"
+echo "Video device  : "$ff_vdev
+echo "Audio device  : "$ff_adev
+echo "Framerate     : "${ffmbashfpsin}
+echo "ffmpeg command: "${ff_command}
+echo "Running following ffmpeg command:"
 echo ""
-#if [ "$autostart" = false ]; then
+echo $COMMAND
+echo ""
 
-if [ $autostart -eq 0 ]; then
+if [ $ff_autostart -eq 0 ]; then
     echo "Press <enter> to starting streaming. Once started, press enter <q> to quit."
     read startstreaming
 fi
-
-#! @bug Command below does not work, it breaks its neck over ${setframerate} while "${vdev}:${adev}" works. Need to use eval.
-#ffmpeg -y ${setframerate} -f avfoundation -i "${vdev}:${adev}" -c:v libx264 -crf 0 -preset ultrafast test.m3u8
-
-#command="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${VDEV}:${ADEV}\" -c:v libx264 -crf 0 -preset ultrafast test.m3u8"
-#eval $command
-mkdir -p  streams/"$output_dir"
-COMMAND="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${VDEV}:${ADEV}\" -c:v libx264 -crf 0 -preset ultrafast streams/${output_dir}/test.m3u8"
+mkdir -p  "$ff_rootdir/$output_dir"
+. commands/"$ff_command".sh
 eval $COMMAND
