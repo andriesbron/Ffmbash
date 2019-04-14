@@ -32,10 +32,12 @@ verbose=0
 template_file=""
 ff_fps=""
 
-echo ${output_dir}
-#output_dir=$(date +%Y%m%d)
-#mkdir -p  /home/app/logs/"$foldername"
-#sh sample.sh > /home/app/logs/"$foldername"/test$(date +%Y%m%d%H%M%S).log
+#! Future use, check an ics file if the I should go live now, to automate camera's.
+. modules/ics.sh
+POINTER_LIVENOW=false
+parseics http://localhost:8888/livestream.ics
+echo "$POINTER_LIVENOW"
+
 
 function show_help {
 . modules/help.sh
