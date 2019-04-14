@@ -5,6 +5,8 @@
 
 User friendly bash bash script wrapper for livestreaming with ffmpeg on MacOS.
 
+Create your own templates and commands for livestreaming as well
+
 # Modify
 
 See templates directory and the commands directory. The naming in the template is different from the commands, however, the relation is obvious. Create your own template file and command and load it with ffmbash command line options.
@@ -37,8 +39,6 @@ Type in the terminal:
 ```
 ./ffmbash.sh -h
 ```
-
-Idea is to create your own templates and commands.
 
 
 # License
