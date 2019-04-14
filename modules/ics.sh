@@ -36,6 +36,14 @@ function parseics {
             #! now example:     20190414T210839 
             #! dtstart example: 20190414T090000
             #! This has a detection span of 1 minute... that's not enough.
+            
+            #https://stackoverflow.com/questions/47719681/calculate-date-time-difference-in-bash-on-macos
+            end=$(date -j -f "%b %d %Y %H:%M:%S" "Dec 25 2017 08:00:00" +%s)
+            now=$(date +%s)
+            #printf '%d seconds left till target date\n' "$(( (end-now) ))"
+            #printf '%d days left till target date\n' "$(( (end-now)/86400 ))"
+            
+            
             if [[ ${dtstart} == *${now}* ]]; then
                 echo "LIVE NOW!"
                 POINTER=true
