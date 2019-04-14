@@ -12,15 +12,18 @@ See templates directory and the commands directory. The naming in the template i
 # Usage
 
 
-- To guide you through selections, type
+### Guiding through options
 
+Type in the terminal:
 ```
 ./ffmbash.sh
 ```
 Select the camera and audio device, if a framerate is required, select it, next press enter. Default, an Apple HLS video is stored in the videos directory.
 
 
-- Load with a template file
+### Use a template file
+
+Type in the terminal:
 
 ```
 ./ffmbash.sh -t hls_file
@@ -28,8 +31,9 @@ Select the camera and audio device, if a framerate is required, select it, next 
 Check hls_file.txt in the templates directory and see how you can manipulate the final ffmpeg command.
 
 
-- Displays more help
+### More help
 
+Type in the terminal:
 ```
 ./ffmbash.sh -h
 ```
