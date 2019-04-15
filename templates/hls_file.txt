@@ -1,4 +1,4 @@
-AUTOSTART=0
+AUTOSTART=1
 VDEV=0
 ADEV=0
 VDEVNAME=Camera_a_this_does_not_work_yet_only_for_testing
@@ -9,3 +9,4 @@ DTSTOP=21-02-2016T23:00:00
 COMMAND=apple_hls
 #COMMAND=hls
 #COMMAND=youtube
+#REMARK=Don't place comments after settings, its a very basic parsing script.
