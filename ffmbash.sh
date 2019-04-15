@@ -27,6 +27,7 @@ ff_rootdir=videos
 ff_command=apple_hls                    #! Default command to be used.
 ff_autostart=0                          #! If 1 ffmpeg immediately starts when having prepared all settings
 ff_fps=""
+ff_set_duration=""
 output_file=""
 output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that target a file
 
@@ -135,9 +136,9 @@ if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
     done
     IFS=SAVEIFS
     echo ""
-    echo "${bold}Select the video device (number) you want to use (leave empty for none):${normal}"
+    echo "${bold}Select the video device (number) you want to use (leave empty for none):${normal} "
     read ff_vdev
-    echo "${bold}Select the audio device (number) you want to use (leave empty for none):${normal}"
+    echo "${bold}Select the audio device (number) you want to use (leave empty for none):${normal} "
     read ff_adev
     #! If no media device is selected, exit the script
     #! Works or [ ! -z $vdev ] means not empty.
@@ -179,9 +180,9 @@ if [ -z $ffmbashfpsin ]; then
     if [ "$fpsok" = false ]; then
         echo ""
         if [ ! -z $ffmbashfpsin ]; then
-            echo "${bold}"${ffmbashfpsin}" is not a proper framerate, select a proper framerate:${normal}"
+            echo "${bold}"${ffmbashfpsin}" is not a proper framerate, select a proper framerate:${normal} "
         else
-            echo "${bold}Default framerate is not a proper framerate, select a proper framerate:${normal}"
+            echo "${bold}Default framerate is not a proper framerate, select a proper framerate:${normal} "
         fi
         read myframerate
         IFS=$'   '
@@ -204,6 +205,11 @@ if [ -z $ff_command ]; then
     echo "Enter ffmpeg command to use (name of file without extension in the command directory):"
     read ff_command
 fi
+#! If livenow, set the stream duration so that it automatically stops
+if [ $POINTER_LIVENOW = true ]; then
+    ff_set_duration="-t "$POINTER_DURATION
+fi
+
 #! Creating target directory and load the ffmpeg command
 mkdir -p  "$ff_rootdir/$output_dir"
 . commands/"$ff_command".sh
@@ -217,13 +223,23 @@ echo "Screen resolution: "$ff_screen_resolution
 echo "Framerate        : "${ffmbashfpsin}
 echo "ffmpeg command   : "${ff_command}
 echo "${bold}Automated start${normal}"
-echo "Start time       : "$ff_dtstart
-echo "End time         : "$ff_dtend
-echo "Rrule            : "$ff_rrule
-echo "${bold}Using ffmpeg command:${normal}"
+#! ICS support only through use of a template
+if [ ! -z $template_file ]; then
+    echo "Start time       : "$ff_dtstart
+    echo "End time         : "$ff_dtend
+    echo "Rrule (not yet available): "$ff_rrule
+    echo "Start Live Now   : "$POINTER_LIVENOW
+    #! If livenow, set the stream duration so that it automatically stops
+    #! Variable is set before command is loaded :-)
+    if [ $POINTER_LIVENOW = true ]; then
+        echo "Program duration : "$POINTER_DURATION
+    fi
+else
+    echo "Start time       : Cannot be used command line (use template)."
+fi
+echo "${bold}Ffmpeg command:${normal}"
 echo $COMMAND
 echo ""
-
 if [ $ff_autostart -eq 0 ]; then
     echo "Press <enter> to starting streaming. Once started, press enter <q> to quit."
     read startstreaming
