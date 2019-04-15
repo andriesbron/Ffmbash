@@ -34,8 +34,8 @@ output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that targ
 ff_dtstart=""                           #! Start time of a livestream for automation purposes. Not yet working.
 ff_dtend=""                             #! End time of a livestream for automation purposes. Not yet working, set ffmpeg streaming duration.
 ff_rrule=""                             #! Start time of a livestream for automation purposes. Not yet working.
-POINTER_LIVENOW=false                  #! Indicates if a stream has to start right now based on ics format. "POINTER" is written in ics.sh module.
-POINTER_DURATION="00:00:00"              #! Duration of the stream when ics started. "POINTER" is written in ics.sh module.
+POINTER_LIVENOW=false                   #! Indicates if a stream has to start right now based on ics format. "POINTER" is written in ics.sh module.
+POINTER_DURATION="00:00:00"             #! Duration of the stream when ics started. "POINTER" is written in ics.sh module.
 
 #! Initialize ffmbash items
 verbose=0
@@ -123,11 +123,11 @@ if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
     for line in $(ffmpeg -f avfoundation -list_devices true -i “” 2>&1); do
         if [[ ${line} == *'AVFoundation video devices:'* ]]; then
             echo ""
-            echo "--- Available video devices ---"
+            echo "${bold}Available video devices:${normal}"
         fi
         if [[ ${line} == *'AVFoundation audio devices:'* ]]; then
             echo ""
-            echo "--- Available audio devices ---"
+            echo "${bold}Available audio devices:${normal}"
         fi
         if [[ ${line} == *'AVFoundation input device'* ]]; then
             echo ${line}
@@ -135,14 +135,14 @@ if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
     done
     IFS=SAVEIFS
     echo ""
-    echo "Select the video device (number) you want to use (leave empty for none):"
+    echo "${bold}Select the video device (number) you want to use (leave empty for none):${normal}"
     read ff_vdev
-    echo "Select the audio device (number) you want to use (leave empty for none):"
+    echo "${bold}Select the audio device (number) you want to use (leave empty for none):${normal}"
     read ff_adev
     #! If no media device is selected, exit the script
     #! Works or [ ! -z $vdev ] means not empty.
     if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
-        echo "Sorry, you must select either or both a video or audio device, thank you for using ffmbash."
+        echo "${bold}Sorry, you must select either or both a video or audio device, thank you for using ffmbash.${normal}"
         echo ""
         echo ""
         exit 0
@@ -179,9 +179,9 @@ if [ -z $ffmbashfpsin ]; then
     if [ "$fpsok" = false ]; then
         echo ""
         if [ ! -z $ffmbashfpsin ]; then
-            echo ${ffmbashfpsin} "is not a proper framerate, select a proper framerate:"
+            echo "${bold}"${ffmbashfpsin}" is not a proper framerate, select a proper framerate:${normal}"
         else
-            echo "Default framerate is not a proper framerate, select a proper framerate:"
+            echo "${bold}Default framerate is not a proper framerate, select a proper framerate:${normal}"
         fi
         read myframerate
         IFS=$'   '
