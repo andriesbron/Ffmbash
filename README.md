@@ -12,6 +12,7 @@ User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 - Define templates that sets the command and contains configurations for that command (see templates directory)
 - Add a dtstart and a dtend to the template to start the stream at a particular date and time
 
+**Advice test your configuration before trusting it**
 
 # Modify
 
@@ -39,7 +40,7 @@ Type in the terminal:
 Check hls_file.txt in the templates directory and see how you can manipulate the final ffmpeg command.
 
 
-### More help
+### More help (not complete)
 
 Type in the terminal:
 ```
