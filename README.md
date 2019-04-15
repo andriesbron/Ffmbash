@@ -12,9 +12,9 @@ User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 - Templates: Define templates to configure selected ffmpeg command (see templates directory).
 - Automation: Planned start by adding a dtstart and a dtend item to a template.
 
-**Advice: test your configuration before relying on it.**
-**Notice**
-If you search for template and command syntax, please verify hls_file.txt and apple_hls.sh in resp. templates and commands directory. If you stick to what is used there, you should basically get it working.
+**Advice:** Test your configuration before relying on it.
+
+**Notice:** If you search for template and command syntax, please verify hls_file.txt and apple_hls.sh in resp. templates and commands directory. If you stick to what is used there, you should basically get it working.
 
 # Usage
 
