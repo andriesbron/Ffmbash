@@ -218,3 +218,4 @@ if [ $ff_autostart -eq 0 ]; then
 fi
 
 eval $COMMAND
+
