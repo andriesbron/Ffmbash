@@ -24,10 +24,13 @@ echo $content
 # Initialize variables:
 ff_screen_resolution=650x360
 ff_rootdir=videos
-ff_command=apple_hls
-ff_autostart=0
+ff_command=apple_hls                    #! Default command to be used.
+ff_autostart=0                          #! If 1 ffmpeg immediately starts when having prepared all settings
+ff_dtstart=""                           #! Start time of a livestream for automation purposes. Not yet working.
+ff_dtend=""                             #! End time of a livestream for automation purposes. Not yet working, set ffmpeg streaming duration.
+ff_rrule=""                             #! Start time of a livestream for automation purposes. Not yet working.
 output_file=""
-output_dir=$(date +%Y%m%dT%H%M%S)
+output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that target a file
 verbose=0
 template_file=""
 ff_fps=""
@@ -43,22 +46,18 @@ function show_help {
 . modules/help.sh
 }
 
-while getopts "h?avt:o:r:" opt; do
+while getopts "h?avc:t:o:r:" opt; do
     case "$opt" in
         h|\?)
         show_help
         exit 0
         ;;
-        a)  autostart=1
-        ;;
-        v)  verbose=1
-        ;;
-        t)  template_file=$OPTARG
-        ;;
-        o)  output_file=$OPTARG
-        ;;
-        r)  ff_fps=$OPTARG
-        ;;
+        a)  autostart=1;;
+        v)  verbose=1;;
+        c)  ff_command=$OPTARG;;
+        t)  template_file=$OPTARG;;
+        o)  output_file=$OPTARG;;
+        r)  ff_fps=$OPTARG;;
     esac
 done
 
@@ -67,8 +66,6 @@ shift $((OPTIND-1))
 [ "${1:-}" = "--" ] && shift
 
 echo "autostart=$autostart, verbose=$verbose, template_file='$template_file', output_file='$output_file', ff_fps=$ff_fps, Leftovers: $@"
-
-#! @todo Load only the configuration file if the option is given -t hls_file
 
 #if a template file is given, read the template and start if autostart is set.
 if [ ! -z $template_file ]; then
@@ -101,19 +98,6 @@ if [ ! -z $template_file ]; then
     done < templates/$template_file.txt
     IFS=SAVEIFS
 fi
-
-echo "Komt ie"
-echo $ff_vdev
-echo $ff_adev
-echo $ff_screen_resolution
-echo $ff_vdevname
-echo $ff_adevname
-echo $ff_dtstart
-echo $ff_command
-echo "Was ie"
-
-#exit 0
-
 #! Setting the devices
 if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
     echo ""
@@ -207,13 +191,22 @@ if [ -z $ff_command ]; then
     echo "Enter ffmpeg command to use (name of file without extension in the command directory):"
     read ff_command
 fi
+#! Creating target directory and load the ffmpeg command
+mkdir -p  "$ff_rootdir/$output_dir"
+. commands/"$ff_command".sh
+
 
 echo ""
 echo "${bold}Settings${normal}"
-echo "Video device  : "$ff_vdev
-echo "Audio device  : "$ff_adev
-echo "Framerate     : "${ffmbashfpsin}
-echo "ffmpeg command: "${ff_command}
+echo "Video device     : "$ff_vdev
+echo "Audio device     : "$ff_adev
+echo "Screen resolution: "$ff_screen_resolution
+echo "Framerate        : "${ffmbashfpsin}
+echo "ffmpeg command   : "${ff_command}
+echo "${bold}Automated start${normal}"
+echo "Start time       : "$ff_dtstart
+echo "End time         : "$ff_dtend
+echo "Rrule            : "$ff_rrule
 echo "Running following ffmpeg command:"
 echo ""
 echo $COMMAND
@@ -223,6 +216,5 @@ if [ $ff_autostart -eq 0 ]; then
     echo "Press <enter> to starting streaming. Once started, press enter <q> to quit."
     read startstreaming
 fi
-mkdir -p  "$ff_rootdir/$output_dir"
-. commands/"$ff_command".sh
+
 eval $COMMAND
