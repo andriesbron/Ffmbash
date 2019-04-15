@@ -32,6 +32,26 @@ Type in the terminal:
 Select the camera and audio device, if a framerate is required, select it, next press enter. Default, an Apple HLS video is stored in the videos directory.
 
 
+### Use a particular command
+
+Type in the terminal:
+
+```
+./ffmbash.sh -c apple_hls
+```
+Loads the commands/apple_hls.sh
+
+Attention: is overruled by template setting. So, using command line options you must be sure not to have that command defined in a template.
+
+Therefore commands like:
+
+```
+./ffmbash.sh -t hls_file -c hls
+```
+
+will load apple_hls command, because, that one is configured in hls_file.txt.
+
+
 ### Use a template file
 
 Type in the terminal:
@@ -41,6 +61,7 @@ Type in the terminal:
 ```
 Check hls_file.txt in the templates directory and see how you can manipulate the final ffmpeg command.
 
+Attention: template settings overrule all other settings like, e.g. command line options.
 
 ### More help (not complete)
 
