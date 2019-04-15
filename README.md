@@ -1,7 +1,7 @@
 # ffmbash
 ```MacOS```
 
-** ffmbash is a work in progress, the current status is a useful prototype, really **
+**ffmbash is a work in progress, the current status is a useful prototype, really**
 
 User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 
