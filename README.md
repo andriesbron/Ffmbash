@@ -3,7 +3,7 @@
 
 [ffmbash is a work in progress, the current status is a useful prototype]
 
-User friendly bash bash script wrapper for livestreaming with ffmpeg on MacOS.
+User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 
 Create your own templates and commands for livestreaming as well
 
