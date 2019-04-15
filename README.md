@@ -1,4 +1,4 @@
-# ffmbash
+# Ffmbash
 ```MacOS```
 
 **ffmbash is a work in progress, the current status is a useful prototype, really**
