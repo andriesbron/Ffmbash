@@ -16,12 +16,11 @@ User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 **Notice**
 If you search for template and command syntax, please verify hls_file.txt and apple_hls.sh in resp. templates and commands directory. If you stick to what is used there, you should basically get it working.
 
-# Modify
-
-See templates directory and the commands directory. The naming in the template is different from the commands, however, the relation is obvious. Create your own template file and command and load it with ffmbash command line options.
-
 # Usage
 
+### Defaults
+
+Default the apple_hls.sh command is loaded.
 
 ### Guiding through options
 
@@ -37,9 +36,9 @@ Select the camera and audio device, if a framerate is required, select it, next 
 Type in the terminal:
 
 ```
-./ffmbash.sh -c apple_hls
+./ffmbash.sh -c hls
 ```
-Loads the commands/apple_hls.sh
+Loads the commands/hls.sh
 
 **Attention:** Is overruled by template setting. So, using command line options you must be sure not to have that command defined in a template.
 
@@ -49,7 +48,7 @@ Therefore commands like:
 ./ffmbash.sh -t hls_file -c hls
 ```
 
-will load apple_hls command, because, that one is configured in hls_file.txt.
+will load the apple_hls command, because, that one is configured in hls_file.txt.
 
 
 ### Use a template file
@@ -59,7 +58,7 @@ Type in the terminal:
 ```
 ./ffmbash.sh -t hls_file
 ```
-Check hls_file.txt in the templates directory and see how you can manipulate the final ffmpeg command.
+Load templates/hls_file.txt. You can create your own and modify or leave out settings to manipulate the loaded ffmpeg command.
 
 **Attention:** Template settings overrule all other settings like, e.g. command line options.
 
