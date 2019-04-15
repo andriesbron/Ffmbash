@@ -13,20 +13,28 @@
 # You should have received a copy of the GNU General Public License
 # along with Ffmbash.  If not, see <http://www.gnu.org/licenses/>.
 
+
+function convertsecs() {
+    ((h=${1}/3600))
+    ((m=(${1}%3600)/60))
+    ((s=${1}%60))
+    printf "%02d:%02d:%02d\n" $h $m $s
+}
+
 function parseicstimestamp {
     if [ ! -z $2 ]; then
         now=$(date +%s)
         #! This works: date -j -f "%d-%m-%YT%H:%M:%S" "21-02-2016T21:00:00" +%s
         start=$(date -j -f "%d-%m-%YT%H:%M:%S" "$1" +%s)
         end=$(date -j -f "%d-%m-%YT%H:%M:%S" "$2" +%s)
+        #! Create data to check if the stream has to start now:
         time_till_start=$(( (start-now) ))
-        time_when_it_stops=$(( (end-now) ))
+        time_when_it_stops=$(( (end-now+60) )) #! Add a minute, because, I am a nice guy.
         #! Give the script the chance to relaunch as long as the program should go live.
-        if [ $time_till_start -lt 60 ] && [ $time_when_it_stops -gt 0 ];then
+        if [ $time_till_start -lt 120 ] && [ $time_when_it_stops -gt 0 ];then
             POINTER_LIVENOW=true
-            program_duration_sec=$(( (end-start) ))
-            POINTER_DURATION="00:00:00"
             #! Now set the duration of the livestream.
+            POINTER_DURATION=$(convertsecs $time_when_it_stops)
         fi
     else
         echo "No dtend is provided, cannot set automation."
