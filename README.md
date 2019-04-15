@@ -6,11 +6,11 @@
 User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 
 ## Features
-- Handpick devices and framerate as you launch the script.
-- Add command line options for loading templates or commands.
-- Define ffmpeg commands that can be selected command line or in templates (see command directory).
-- Define templates to configure selected ffmpeg command (see templates directory).
-- Planned start by adding a dtstart and a dtend item to a template.
+- Manual: Handpick devices and framerate as you launch the script.
+- Command line options: Add command line options for loading templates or commands.
+- Ffmpeg commands: Define ffmpeg commands that can be selected command line or in templates (see command directory).
+- Templates: Define templates to configure selected ffmpeg command (see templates directory).
+- Automation: Planned start by adding a dtstart and a dtend item to a template.
 
 **Advice: test your configuration before relying on it.**
 **Notice**
