@@ -21,25 +21,32 @@ content=$(wget http://localhost:8888/service.php -q -O -)
 echo $content
 
 
-# Initialize variables:
+#! Initialize ffmpeg variables:
 ff_screen_resolution=650x360
 ff_rootdir=videos
 ff_command=apple_hls                    #! Default command to be used.
 ff_autostart=0                          #! If 1 ffmpeg immediately starts when having prepared all settings
+ff_fps=""
+output_file=""
+output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that target a file
+
+#! Initialize automation based on ics formats
 ff_dtstart=""                           #! Start time of a livestream for automation purposes. Not yet working.
 ff_dtend=""                             #! End time of a livestream for automation purposes. Not yet working, set ffmpeg streaming duration.
 ff_rrule=""                             #! Start time of a livestream for automation purposes. Not yet working.
-output_file=""
-output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that target a file
+POINTER_LIVENOW=false                  #! Indicates if a stream has to start right now based on ics format. "POINTER" is written in ics.sh module.
+POINTER_DURATION="00:00:00"              #! Duration of the stream when ics started. "POINTER" is written in ics.sh module.
+
+#! Initialize ffmbash items
 verbose=0
 template_file=""
-ff_fps=""
+
 
 #! Future use, check an ics file if the I should go live now, to automate camera's.
 . modules/ics.sh
-POINTER_LIVENOW=false
 parseics http://localhost:8888/livestream.ics
-echo "$POINTER_LIVENOW"
+
+
 
 
 function show_help {
@@ -65,7 +72,7 @@ shift $((OPTIND-1))
 
 [ "${1:-}" = "--" ] && shift
 
-echo "autostart=$autostart, verbose=$verbose, template_file='$template_file', output_file='$output_file', ff_fps=$ff_fps, Leftovers: $@"
+#echo "autostart=$autostart, verbose=$verbose, template_file='$template_file', output_file='$output_file', ff_fps=$ff_fps, Leftovers: $@"
 
 #if a template file is given, read the template and start if autostart is set.
 if [ ! -z $template_file ]; then
@@ -82,7 +89,8 @@ if [ ! -z $template_file ]; then
             'ADEVNAME') ff_adevname=$value;;
             'VDEVNAME') ff_vdevname=$value;;
             'DTSTART') ff_dtstart=$value;;
-            'DTSTOP') ff_dtstop=$value;;
+            'DTEND') ff_dtend=$value;;
+            'RRULE') ff_rrule=$value;;
             'FPSIN') ff_fps=$value;;
             'COMMAND') ff_command=$value;;
             'SCREENRES') ff_screen_resolution=$value;;
@@ -98,6 +106,11 @@ if [ ! -z $template_file ]; then
     done < templates/$template_file.txt
     IFS=SAVEIFS
 fi
+
+#! Parsing timestamp given in the template file
+parseicstimestamp $ff_dtstart $ff_dtend $ff_rrule
+echo "LIVE_NOW POINTER: "$POINTER_LIVENOW
+
 #! Setting the devices
 if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
     echo ""
@@ -207,8 +220,7 @@ echo "${bold}Automated start${normal}"
 echo "Start time       : "$ff_dtstart
 echo "End time         : "$ff_dtend
 echo "Rrule            : "$ff_rrule
-echo "Running following ffmpeg command:"
-echo ""
+echo "${bold}Using ffmpeg command:${normal}"
 echo $COMMAND
 echo ""
 
@@ -218,4 +230,3 @@ if [ $ff_autostart -eq 0 ]; then
 fi
 
 eval $COMMAND
-
