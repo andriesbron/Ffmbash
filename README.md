@@ -48,7 +48,7 @@ Therefore commands like:
 ./ffmbash.sh -t hls_file -c hls
 ```
 
-will load the apple_hls command, because, that one is configured in hls_file.txt.
+will load the apple_hls command, because, that apple_hls is configured as COMMAND in hls_file.txt.
 
 
 ### Use a template file
