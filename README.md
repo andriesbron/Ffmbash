@@ -28,7 +28,7 @@ Type in the terminal:
 ```
 ./ffmbash.sh
 ```
-Select the camera and audio device, if a framerate is required, select it, next press enter. Default, an Apple HLS video is stored in the videos directory.
+Select the camera and audio device, if a framerate is required, select it, next press enter. Default, an Apple HLS (commands/apple_hls.sh) video is stored in the videos directory under the timestamp you launched the script.
 
 
 ### Use a particular command
