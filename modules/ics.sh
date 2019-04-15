@@ -13,11 +13,30 @@
 # You should have received a copy of the GNU General Public License
 # along with Ffmbash.  If not, see <http://www.gnu.org/licenses/>.
 
+function parseicstimestamp {
+    if [ ! -z $2 ]; then
+        now=$(date +%s)
+        #! This works: date -j -f "%d-%m-%YT%H:%M:%S" "21-02-2016T21:00:00" +%s
+        start=$(date -j -f "%d-%m-%YT%H:%M:%S" "$1" +%s)
+        end=$(date -j -f "%d-%m-%YT%H:%M:%S" "$2" +%s)
+        time_till_start=$(( (start-now) ))
+        time_when_it_stops=$(( (end-now) ))
+        #! Give the script the chance to relaunch as long as the program should go live.
+        if [ $time_till_start -lt 60 ] && [ $time_when_it_stops -gt 0 ];then
+            POINTER_LIVENOW=true
+            program_duration_sec=$(( (end-start) ))
+            POINTER_DURATION="00:00:00"
+            #! Now set the duration of the livestream.
+        fi
+    else
+        echo "No dtend is provided, cannot set automation."
+    fi
+}
 
 function parseics {
     #! https://stackoverflow.com/questions/6497525/print-date-for-the-monday-of-the-current-week-in-bash#6497622
     #https://www.computerhope.com/unix/udate.htm
-    POINTER=false
+
     #! @bug cannot get that calendar into a variable yet, downloading it and parse the file instead...
     content=$(wget $1 -q -O calendars/livestream.ics)
     # Read through the url.txt file and execute wget command for every filename
@@ -35,7 +54,7 @@ function parseics {
             now="$(date +%Y%m%dT%H%M)" #! Ignore seconds.
             #! now example:     20190414T210839 
             #! dtstart example: 20190414T090000
-            #! This has a detection span of 1 minute... that's not enough.
+
             
             #https://stackoverflow.com/questions/47719681/calculate-date-time-difference-in-bash-on-macos
             end=$(date -j -f "%b %d %Y %H:%M:%S" "Dec 25 2017 08:00:00" +%s)
@@ -43,10 +62,10 @@ function parseics {
             #printf '%d seconds left till target date\n' "$(( (end-now) ))"
             #printf '%d days left till target date\n' "$(( (end-now)/86400 ))"
             
-            
+            #! This has a detection span of 1 minute... that's not enough.
             if [[ ${dtstart} == *${now}* ]]; then
                 echo "LIVE NOW!"
-                POINTER=true
+                POINTER_LIVENOW=true
             fi
             
             case "$(date +%a)" in 
