@@ -41,7 +41,7 @@ Type in the terminal:
 ```
 Loads the commands/apple_hls.sh
 
-Attention: is overruled by template setting. So, using command line options you must be sure not to have that command defined in a template.
+**Attention:** Is overruled by template setting. So, using command line options you must be sure not to have that command defined in a template.
 
 Therefore commands like:
 
@@ -61,7 +61,7 @@ Type in the terminal:
 ```
 Check hls_file.txt in the templates directory and see how you can manipulate the final ffmpeg command.
 
-Attention: template settings overrule all other settings like, e.g. command line options.
+**Attention:** Template settings overrule all other settings like, e.g. command line options.
 
 ### More help (not complete)
 
