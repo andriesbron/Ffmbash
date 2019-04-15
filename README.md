@@ -9,7 +9,7 @@ User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 - Handpick devices and framerate as you launch the script
 - Add command line options to load templates or commands
 - Define ffmpeg commands you want to use through command files (see command directory)
-- Define templates that sets the command and contains configurations for that command
+- Define templates that sets the command and contains configurations for that command (see templates directory)
 - Add a dtstart and a dtend to the template to start the stream at a particular date and time
 
 
