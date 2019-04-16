@@ -35,6 +35,7 @@ output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that targ
 ff_dtstart=""                           #! Start time of a livestream for automation purposes. Not yet working.
 ff_dtend=""                             #! End time of a livestream for automation purposes. Not yet working, set ffmpeg streaming duration.
 ff_rrule=""                             #! Start time of a livestream for automation purposes. Not yet working.
+ff_wait_for_date=false
 POINTER_LIVENOW=false                   #! Indicates if a stream has to start right now based on ics format. "POINTER" is written in ics.sh module.
 POINTER_DURATION="00:00:00"             #! Duration of the stream when ics started. "POINTER" is written in ics.sh module.
 
@@ -46,7 +47,7 @@ function show_help {
 . modules/help.sh
 }
 
-while getopts "h?avc:t:o:r:" opt; do
+while getopts "h?avc:t:o:r:w" opt; do
     case "$opt" in
         h|\?)
         show_help
@@ -58,6 +59,7 @@ while getopts "h?avc:t:o:r:" opt; do
         t)  template_file=$OPTARG;;
         o)  output_file=$OPTARG;;
         r)  ff_fps=$OPTARG;;
+        w)  ff_wait_for_date=true;;
     esac
 done
 
@@ -81,9 +83,16 @@ if [ ! -z $template_file ]; then
             'VDEV') ff_vdev=$value;;
             'ADEVNAME') ff_adevname=$value;;
             'VDEVNAME') ff_vdevname=$value;;
+
             'DTSTART') ff_dtstart=$value;;
             'DTEND') ff_dtend=$value;;
             'RRULE') ff_rrule=$value;;
+            'WAITFORDTSTART')
+            if [[ $value == "1" ]];then
+                ff_wait_for_date=true
+            fi
+            ;;
+
             'FPSIN') ff_fps=$value;;
             'COMMAND') ff_command=$value;;
             'SCREENRES') ff_screen_resolution=$value;;
@@ -98,6 +107,7 @@ if [ ! -z $template_file ]; then
         esac
     done < templates/$template_file.txt
     IFS=SAVEIFS
+
 fi
 
 #! Setting the devices
@@ -194,12 +204,20 @@ fi
 
 #! Automation: Both dtstart and dtend must be set to enable automation.
 if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then
+    echo "I am in ics check"
     #! Future use, check an ics file if the I should go live now, to automate camera's.
     . modules/ics.sh
-    parseics http://localhost:8888/livestream.ics
-    #! Parsing timestamp given in the template file
-    parseicstimestamp $ff_dtstart $ff_dtend $ff_rrule
-    echo "LIVE_NOW POINTER: "$POINTER_LIVENOW
+
+    if [ $ff_wait_for_date = true ]; then
+        #! if e.g. -w is set, then perform this in a loop until the stream has to start.
+        while [ $POINTER_LIVENOW = false ]; do
+            echo "LIVE_NOW POINTER: "$POINTER_LIVENOW
+            parseics http://localhost:8888/livestream.ics
+            #! Parsing timestamp given in the template file
+            parseicstimestamp $ff_dtstart $ff_dtend $ff_rrule
+            sleep 3
+        done
+    fi
 
     #! If livenow, set the stream duration so that it automatically stops
     if [ $POINTER_LIVENOW = true ]; then
@@ -207,12 +225,10 @@ if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then
         ff_autostart=1
     else
         echo ""
-        echo "${bold}Automation: DTSTART event not yet passed, exiting now.${normal}"
+        echo "DTSTART event did not yet happen. If you want me to wait for it, set -w option or set WAITFORDTSTART=1 in template. "
         echo ""
         exit 0
     fi
-
-#! if e.g. -w is set, then perform this in a loop until the stream has to start.
 fi
 
 
