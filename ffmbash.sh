@@ -42,14 +42,6 @@ POINTER_DURATION="00:00:00"             #! Duration of the stream when ics start
 verbose=0
 template_file=""
 
-
-#! Future use, check an ics file if the I should go live now, to automate camera's.
-. modules/ics.sh
-parseics http://localhost:8888/livestream.ics
-
-
-
-
 function show_help {
 . modules/help.sh
 }
@@ -107,10 +99,6 @@ if [ ! -z $template_file ]; then
     done < templates/$template_file.txt
     IFS=SAVEIFS
 fi
-
-#! Parsing timestamp given in the template file
-parseicstimestamp $ff_dtstart $ff_dtend $ff_rrule
-echo "LIVE_NOW POINTER: "$POINTER_LIVENOW
 
 #! Setting the devices
 if [ -z $ff_adev ] && [ -z $ff_vdev ]; then
@@ -201,13 +189,18 @@ if [ -z $ffmbashfpsin ]; then
     fi
     IFS=SAVEIFS
 fi
-if [ -z $ff_command ]; then
-    echo "Enter ffmpeg command to use (name of file without extension in the command directory):"
-    read ff_command
-fi
 
-#! Both dtstart and dtend must be set to enable automation.
+
+
+#! Automation: Both dtstart and dtend must be set to enable automation.
 if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then
+    #! Future use, check an ics file if the I should go live now, to automate camera's.
+    . modules/ics.sh
+    parseics http://localhost:8888/livestream.ics
+    #! Parsing timestamp given in the template file
+    parseicstimestamp $ff_dtstart $ff_dtend $ff_rrule
+    echo "LIVE_NOW POINTER: "$POINTER_LIVENOW
+
     #! If livenow, set the stream duration so that it automatically stops
     if [ $POINTER_LIVENOW = true ]; then
         ff_set_duration="-t "$POINTER_DURATION
@@ -218,10 +211,18 @@ if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then
         echo ""
         exit 0
     fi
+
+#! if e.g. -w is set, then perform this in a loop until the stream has to start.
 fi
+
 
 #! Creating target directory and load the ffmpeg command
 mkdir -p  "$ff_rootdir/$output_dir"
+
+if [ -z $ff_command ]; then
+    echo "Enter ffmpeg command to use (name of file without extension in the command directory):"
+    read ff_command
+fi
 . commands/"$ff_command".sh
 
 
