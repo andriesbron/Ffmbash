@@ -41,7 +41,7 @@ Type in the terminal:
 ```
 ./ffmbash.sh -c hls
 ```
-Loads the commands/hls.sh
+Loads the commands/hls.sh command.
 
 **Attention:** Is overruled by template setting. So, using command line options you must be sure not to have that command defined in a template.
 
@@ -63,7 +63,7 @@ Type in the terminal:
 ```
 Load templates/hls_file.txt. You can create your own and modify or leave out settings to manipulate the loaded ffmpeg command.
 
-**Attention:** Template settings overrule all other settings like, e.g. command line options.
+**Attention:** Template settings overrule command line options. If you want to use command line options in combination with a template, don't use the command line option in the template.
 
 ### More help (not complete)
 
