@@ -1,4 +1,5 @@
 AUTOSTART=1
+WAITFORDTSTART=1
 VDEV=0
 ADEV=0
 VDEVNAME=Camera_a_this_does_not_work_yet_only_for_testing
