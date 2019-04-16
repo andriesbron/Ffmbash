@@ -6,13 +6,13 @@
 User friendly bash script wrapper for livestreaming with ffmpeg (:bow:) on MacOS.
 
 ## Features
-- Manual: Handpick devices and framerate as you launch the script.
+- Manual: Handpick devices and framerate by launching the bare script: ```$ ./ffmbash```.
 - Command line options: Add command line options for loading templates or commands.
 - Ffmpeg commands: Define ffmpeg commands that can be selected command line or in templates (see command directory).
 - Templates: Define templates to configure selected ffmpeg command (see templates directory).
 - Automation*: Planned start by adding a dtstart and a dtend item to a template.
 
-*) Automation is done by either letting the script wait for the ```DTSTART``` time to pass or through a cron job like method. Currently, the script calculates whether it is time to start (uttermost 2 minutes upfront ```DTSTART``` event). Take notice both ```DTSTART``` and ```DTEND``` have to be provided in the template to enable automate.
+*) Automation is done by either letting the script wait for the ```DTSTART``` time to pass or through a cron job like method. Currently, the script calculates whether it is time to start (uttermost 2 minutes upfront ```DTSTART``` event). Take notice both ```DTSTART``` and ```DTEND``` have to be provided in the template to enable automation. If you want the script to wait until the ```DTSTART``` event happens, launch ffmbash with -w option.
 Automation using a cronjob might suffer issue https://github.com/andriesbron/Ffmbash/issues/11 . working on it to solve that.
 
 **Advice:** Test your configuration before relying on it. The point is, it's a prototype and prototypes always fail when they are demonstrated.
@@ -33,7 +33,7 @@ Default the apple_hls.sh command is loaded and stores a video in a timestamp dir
 
 Type in the terminal:
 ```
-./ffmbash.sh
+$ ./ffmbash.sh
 ```
 Select the camera and audio device, if a framerate is required, select it, next press enter. Default, an Apple HLS (commands/apple_hls.sh) video is stored in the videos directory under the timestamp you launched the script.
 
@@ -43,7 +43,7 @@ Select the camera and audio device, if a framerate is required, select it, next 
 Type in the terminal:
 
 ```
-./ffmbash.sh -c hls
+$ ./ffmbash.sh -c hls
 ```
 Loads the commands/hls.sh command.
 
@@ -52,7 +52,7 @@ Loads the commands/hls.sh command.
 Therefore commands like:
 
 ```
-./ffmbash.sh -t hls_file -c hls
+$ ./ffmbash.sh -t hls_file -c hls
 ```
 
 will load the apple_hls command, because, that apple_hls is configured as COMMAND in hls_file.txt.
@@ -63,7 +63,7 @@ will load the apple_hls command, because, that apple_hls is configured as COMMAN
 Type in the terminal:
 
 ```
-./ffmbash.sh -t hls_file
+$ ./ffmbash.sh -t hls_file
 ```
 Load templates/hls_file.txt. You can create your own and modify or leave out settings to manipulate the loaded ffmpeg command.
 
@@ -73,7 +73,7 @@ Load templates/hls_file.txt. You can create your own and modify or leave out set
 
 Type in the terminal:
 ```
-./ffmbash.sh -h
+$ ./ffmbash.sh -h
 ```
 
 
