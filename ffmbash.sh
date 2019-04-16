@@ -205,9 +205,19 @@ if [ -z $ff_command ]; then
     echo "Enter ffmpeg command to use (name of file without extension in the command directory):"
     read ff_command
 fi
-#! If livenow, set the stream duration so that it automatically stops
-if [ $POINTER_LIVENOW = true ]; then
-    ff_set_duration="-t "$POINTER_DURATION
+
+#! Both dtstart and dtend must be set to enable automation.
+if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then
+    #! If livenow, set the stream duration so that it automatically stops
+    if [ $POINTER_LIVENOW = true ]; then
+        ff_set_duration="-t "$POINTER_DURATION
+        ff_autostart=1
+    else
+        echo ""
+        echo "${bold}Automation: DTSTART event not yet passed, exiting now.${normal}"
+        echo ""
+        exit 0
+    fi
 fi
 
 #! Creating target directory and load the ffmpeg command
