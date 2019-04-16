@@ -38,7 +38,7 @@ ff_rrule=""                             #! Start time of a livestream for automa
 ff_wait_for_date=false
 POINTER_LIVENOW=false                   #! Indicates if a stream has to start right now based on ics format. "POINTER" is written in ics.sh module.
 POINTER_DURATION="00:00:00"             #! Duration of the stream when ics started. "POINTER" is written in ics.sh module.
-
+POINTER_EVENT_PASSED=false
 #! Initialize ffmbash items
 verbose=0
 template_file=""
@@ -208,7 +208,7 @@ if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then
     #! Future use, check an ics file if the I should go live now, to automate camera's.
     . modules/ics.sh
 
-    if [ $ff_wait_for_date = true ]; then
+    if [ $ff_wait_for_date = true ] && [ $POINTER_EVENT_PASSED = false ]; then
         #! if e.g. -w is set, then perform this in a loop until the stream has to start.
         while [ $POINTER_LIVENOW = false ]; do
             echo "LIVE_NOW POINTER: "$POINTER_LIVENOW
@@ -218,7 +218,12 @@ if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then
             sleep 3
         done
     fi
-
+    
+    #! If livenow, set the stream duration so that it automatically stops
+    if [ $POINTER_EVENT_PASSED = true ]; then
+        echo "Event has passed, exiting..."
+        exit 0
+    fi
     #! If livenow, set the stream duration so that it automatically stops
     if [ $POINTER_LIVENOW = true ]; then
         ff_set_duration="-t "$POINTER_DURATION
