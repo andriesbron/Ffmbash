@@ -3,7 +3,7 @@
 
 **ffmbash is a work in progress, the current status is a useful prototype, really**
 
-User friendly bash script wrapper for livestreaming with :clap: ffmpeg :bow: on MacOS.
+User friendly bash script wrapper for livestreaming with ffmpeg (:bow:) on MacOS.
 
 ## Features
 - Manual: Handpick devices and framerate as you launch the script.
