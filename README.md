@@ -21,7 +21,9 @@ Automation using a cronjob might suffer issue https://github.com/andriesbron/Ffm
 
 # Usage
 
-### Defaults
+### Concept Of Operation And Defaults
+
+The concept is that a particular ffmpeg command is loaded by the command line option ```-c``` or a template option ```COMMAND```. These ffmpeg commands are stored in a file in the commands directory. So, create your own commands in your own files in the commands directory and start using them via command line option or in a template.
 
 Default the apple_hls.sh command is loaded.
 
