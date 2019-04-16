@@ -47,15 +47,9 @@ $ ./ffmbash.sh -c hls
 ```
 Loads the commands/hls.sh command.
 
-**Attention:** Is overruled by template setting. So, using command line options you must be sure not to have that command defined in a template.
+**Attention:** Command line options are overruled by template settings. Make sure not to have a command line option configured in the template if you want to use that option at the command line.
 
-Therefore commands like:
-
-```
-$ ./ffmbash.sh -t hls_file -c hls
-```
-
-will load the apple_hls command, because, that apple_hls is configured as COMMAND in hls_file.txt.
+Therefore, the following command ```$ ./ffmbash.sh -t hls_file -c hls``` loads the ```apple_hls``` command, because, the ```apple_hls``` is configured as ```COMMAND``` in the ```hls_file``` template (see ```templates/hls_file.txt```).
 
 
 ### Use a template file
