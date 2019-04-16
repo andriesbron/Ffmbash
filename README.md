@@ -12,9 +12,8 @@ User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 - Templates: Define templates to configure selected ffmpeg command (see templates directory).
 - Automation*: Planned start by adding a dtstart and a dtend item to a template.
 
-*) Automation requires a cron job or similar, the script calculates whether it is time to start (uttermost 2 minutes upfront DTSTART event). Take notice both DTSTART and DTEND have to be provided in the template to enable automate.
-
-*) Automation might suffer issue https://github.com/andriesbron/Ffmbash/issues/11
+*) Automation is done by either letting the script wait for the DTSTART time to pass or through a cron job like method. Currently, the script calculates whether it is time to start (uttermost 2 minutes upfront DTSTART event). Take notice both DTSTART and DTEND have to be provided in the template to enable automate.
+Automation using a cronjob might suffer issue https://github.com/andriesbron/Ffmbash/issues/11 . working on it to solve that.
 
 **Advice:** Test your configuration before relying on it. The point is, it's a prototype and prototypes always fail when they are demonstrated.
 
