@@ -36,6 +36,9 @@ function parseicstimestamp {
             #! Now set the duration of the livestream.
             POINTER_DURATION=$(convertsecs $time_when_it_stops)
         fi
+        if [ $time_when_it_stops -lt 0 ]; then
+            POINTER_EVENT_PASSED=true
+        fi
     else
         echo "No dtend is provided, cannot set automation."
     fi
