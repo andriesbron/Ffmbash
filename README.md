@@ -46,7 +46,7 @@ Type in the terminal:
 ```
 $ ./ffmbash.sh -c hls
 ```
-Loads the commands/hls.sh command.
+Loads the ```hls``` command by including the file ```commands/hls.sh```.
 
 **Attention:** Command line options are overruled by template settings. Make sure not to have a command line option configured in the template if you want to use that option at the command line.
 
@@ -60,7 +60,7 @@ Type in the terminal:
 ```
 $ ./ffmbash.sh -t hls_file
 ```
-Load ```templates/hls_file.txt```. You can create your own and modify or leave out settings to manipulate the loaded ffmpeg command.
+Loads the ```hls_file``` template by parsing ```templates/hls_file.txt``` into the script. You can create your own template and manipulate the loaded ffmpeg command to your wishes.
 
 **Attention:** Template settings overrule command line options. If you want to use command line options in combination with a template, don't use the command line option in the template.
 
