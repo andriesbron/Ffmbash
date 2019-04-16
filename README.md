@@ -21,13 +21,13 @@ Automation using a cronjob might suffer issue https://github.com/andriesbron/Ffm
 
 # Usage
 
-### Concept Of Operation And Defaults
+### Concept Of Use And Defaults
 
-The concept is that a particular ffmpeg command is loaded by the command line option ```-c command_name``` or the template option ```COMMAND```. These ffmpeg commands are stored in a file in the commands directory. So, create your own commands in your own files in the commands directory and start using them via command line option or in a template.
+The concept of Ffmbash is that a ffmpeg command is loaded by the command line option ```-c command_name``` or by the ```COMMAND``` option in a template. The ffmpeg commands are stored in a ```.sh``` file in the commands directory. You can create your own commands in ```.sh``` files, store them in the commands directory and use them also via the command line option or in a template.
 
-To save typing you can create templates and load these via command line option ```-t template_name```. Using templates, you can do a few additional things, namely, automate the start of the livestream by defining a ```DTSTART``` time and a ```DTEND``` time according to .ics format.
+Instead of command line options you can also load a template with options and load it via command line option ```-t template_name```. Using templates, you can do a few additional things, namely, automate the start of the livestream by defining a ```DTSTART``` time and a ```DTEND``` time according to .ics format.
 
-Default the apple_hls.sh command is loaded.
+Default the apple_hls.sh command is loaded and stores a video in a timestamp directory inside the videos directory.
 
 ### Guiding through options
 
