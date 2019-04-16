@@ -14,6 +14,8 @@ User friendly bash script wrapper for livestreaming with ffmpeg on MacOS.
 
 *) Automation requires a cron job or similar, the script calculates whether it is time to start (uttermost 2 minutes upfront DTSTART event). Take notice both DTSTART and DTEND have to be provided in the template to enable automate.
 
+*) Automation might suffer issue https://github.com/andriesbron/Ffmbash/issues/11
+
 **Advice:** Test your configuration before relying on it. The point is, it's a prototype and prototypes always fail when they are demonstrated.
 
 **Notice:** If you search for template and command syntax, please verify hls_file.txt and apple_hls.sh in resp. templates and commands directory. If you stick to what is used there, you should basically get it working.
