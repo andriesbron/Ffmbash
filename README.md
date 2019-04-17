@@ -12,8 +12,9 @@ User friendly bash script wrapper for livestreaming with ffmpeg (:bow:) on MacOS
 - Templates: Define templates to configure selected ffmpeg command (see templates directory).
 - Automation*: Planned start by adding a ```DTSTART``` and a ```DTEND``` item to a template.
 
-*) Automation is done by either letting the script wait for the ```DTSTART``` time to pass or through a cron job like method. Currently, the script calculates whether it is time to start (uttermost 2 minutes upfront ```DTSTART``` event). Take notice both ```DTSTART``` and ```DTEND``` have to be provided in the template to enable automation. If you want the script to wait until the ```DTSTART``` event happens, launch ffmbash with -w option.
-Automation using a cronjob might suffer issue https://github.com/andriesbron/Ffmbash/issues/11 . working on it to solve that.
+*) Automation is done by either letting the script wait for the ```DTSTART``` event to pass or using a cron job like method. The script calculates whether it is time to start the livestream (most early 2 minutes upfront ```DTSTART``` event). Take notice both ```DTSTART``` and ```DTEND``` have to be provided in the template to enable automation. If you want the script to wait until the ```DTSTART``` event happens, launch ffmbash with -w option or set ```WAITFORDTSTART=1``` in a template file.
+
+**Attention:** Automation using a cronjob might suffer issue https://github.com/andriesbron/Ffmbash/issues/11 . working on it to solve that.
 
 **Advice:** Test your configuration before relying on it. The point is, it's a prototype and prototypes always fail when they are demonstrated.
 
@@ -21,14 +22,15 @@ Automation using a cronjob might suffer issue https://github.com/andriesbron/Ffm
 
 # Usage
 
-### Concept Of Use And Defaults
+## Concept Of Use And Defaults
 
 The concept of Ffmbash is that a ffmpeg command is loaded by the command line option ```-c command_name``` or by the ```COMMAND``` option in a template. The ffmpeg commands are stored in a ```.sh``` file in the commands directory. You can create your own commands in ```.sh``` files, store them in the commands directory and use them also via the command line option or in a template.
 
 Instead of command line options you can also load a template with options and load it via command line option ```-t template_name```. Using templates, you can do a few additional things, namely, automate the start of the livestream by defining a ```DTSTART``` time and a ```DTEND``` time according to .ics format.
 
-Default the ```apple_hls``` command is loaded (```commands/apple_hls.sh```) which stores a video in a timestamp directory inside the videos directory.
+Default the ```apple_hls``` command is loaded (see ```commands/apple_hls.sh```) and stores a video in a timestamp directory inside the videos directory.
 
+## Examples of usage
 ### Guiding through options
 
 Type in the terminal:
