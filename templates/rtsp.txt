@@ -1,0 +1,8 @@
+REMARK=thisisuntested
+VDEV=0
+ADEV=0
+RTSP_USER_NAME=username
+RTSP_USER_PASSWORD=password
+RTSP_SERVER_URL=urltostreamto
+RTSP_SERVER_PORT=port
+RTSP_KEY=streamkey
