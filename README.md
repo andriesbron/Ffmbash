@@ -65,6 +65,15 @@ Loads the ```hls_file``` template by parsing ```templates/hls_file.txt``` into t
 
 **Attention:** Template settings overrule command line options. If you want to use command line options in combination with a template, don't use the command line option in the template.
 
+### Automate using DTSTART and DTEND timestamp
+
+Type in the terminal:
+
+```
+$ ./ffmbash.sh -t hls_auto_start
+```
+load the ```hls_auto_start``` template (```templates/hls_auto_start.txt```) which contains a ```DTSTART``` and ```DTEND``` timestamp, additionally ```WAITFORDTSTART``` is set to "1" which causes ffmbash to remain in a loop until the ```DTSTART``` event occurs to start streaming.
+
 ### More help (not complete)
 
 Type in the terminal:
