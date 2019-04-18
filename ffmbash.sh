@@ -39,7 +39,7 @@ template_file=""
 #! Initialize automation based on ics formats
 ff_dtstart=""                           #! Start time of a livestream for automation purposes. Not yet working.
 ff_dtend=""                             #! End time of a livestream for automation purposes. Not yet working, set ffmpeg streaming duration.
-ff_rrule=" "                             #! Start time of a livestream for automation purposes. Not yet working.
+ff_rrule=false                          #! Start time of a livestream for automation purposes. Not yet working.
 ff_wait_for_date=false
 
 function show_help {
@@ -198,18 +198,19 @@ fi
 
 #! Run ICS module
 . modules/ics.sh
-ics_run $ff_dtstart $ff_dtend $ff_rrule $ff_wait_for_date
-#! If livenow, set the stream duration so that it automatically stops
-if [ $ICS_P_LIVENOW = true ]; then
-    ff_set_duration="-t "$ICS_P_DURATION
-    ff_autostart=1
-else
-    echo ""
-    echo "DTSTART event did not yet happen. If you want me to wait for it, set -w option or set WAITFORDTSTART=1 in template. "
-    echo ""
-    exit 0
+if [ ! -z $1 ] && [ ! -z $2 ]; then 
+    ics_run $ff_dtstart $ff_dtend $ff_rrule $ff_wait_for_date  
+    #! If livenow, set the stream duration so that it automatically stops
+    if [ $ICS_P_LIVENOW = true ]; then
+        ff_set_duration="-t "$ICS_P_DURATION
+        ff_autostart=1
+    else
+        echo ""
+        echo "DTSTART event did not yet happen. If you want me to wait for it, set -w option or set WAITFORDTSTART=1 in template. "
+        echo ""
+        exit 0
+    fi
 fi
-
 
 #! Creating target directory and load the ffmpeg command
 mkdir -p  "$ff_rootdir/$output_dir"
