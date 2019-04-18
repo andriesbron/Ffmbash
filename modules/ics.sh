@@ -134,25 +134,20 @@ done
 #! @param $3 string RRULE
 #! @param $4 boolean ff_wait_for_date: if set, ics_run keeps running in a loop until the DTSTART event takes place.
 function ics_run {
-echo "wait "$4 " event passed: "$ICS_P_EVENT_PASSED
-echo 
-    if [ ! -z $1 ] && [ ! -z $2 ]; then   
-        if [ $4 = true ] && [ $ICS_P_EVENT_PASSED = false ]; then
-            #! if e.g. -w is set, then perform this in a loop until the stream has to start.
-            while [ $ICS_P_LIVENOW = false ]; do
-                echo "LIVE_NOW POINTER: "$ICS_P_LIVENOW
-                parseics http://localhost:8888/livestream.ics
-                #! Parsing timestamp given in the template file
-                parseicstimestamp $1 $2 $ff_rrule
-                sleep 3
-            done
-        fi
-        
-        #! If livenow, set the stream duration so that it automatically stops
-        if [ $ICS_P_EVENT_PASSED = true ]; then
-            echo "Event has passed, exiting..."
-            exit 0
-        fi
-
+    if [ $4 = true ] && [ $ICS_P_EVENT_PASSED = false ]; then
+        #! if e.g. -w is set, then perform this in a loop until the stream has to start.
+        while [ $ICS_P_LIVENOW = false ]; do
+            echo "LIVE_NOW POINTER: "$ICS_P_LIVENOW
+            parseics http://localhost:8888/livestream.ics
+            #! Parsing timestamp given in the template file
+            parseicstimestamp $1 $2 $ff_rrule
+            sleep 3
+        done
+    fi
+    
+    #! If livenow, set the stream duration so that it automatically stops
+    if [ $ICS_P_EVENT_PASSED = true ]; then
+        echo "Event has passed, exiting..."
+        exit 0
     fi
 }
