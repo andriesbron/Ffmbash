@@ -63,9 +63,7 @@ while getopts "h?av:s:c:t:o:r:w" opt; do
         w)  ff_wait_for_date=true;;
     esac
 done
-
 shift $((OPTIND-1))
-
 [ "${1:-}" = "--" ] && shift
 
 #if a template file is given, read the template and parse it.
@@ -201,7 +199,8 @@ fi
 
 #! Run ICS module
 . modules/ics.sh
-if [ ! -z $1 ] && [ ! -z $2 ]; then 
+if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then 
+echo "Running ics"
     ics_run $ff_dtstart $ff_dtend $ff_rrule $ff_wait_for_date  
     #! If livenow, set the stream duration so that it automatically stops
     if [ $ICS_P_LIVENOW = true ]; then
