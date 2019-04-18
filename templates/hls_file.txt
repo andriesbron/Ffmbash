@@ -1,15 +1,10 @@
 AUTOSTART=1
-WAITFORDTSTART=1
 VDEV=0
 ADEV=0
 VDEVNAME=Camera_a_this_does_not_work_yet_only_for_testing
 ADEVNAME=AudioDev_this_does_not_work_yet_only_for_testing
 FPSIN=30
-DTSTART=15-04-2019T19:00:00
-DTEND=15-04-2019T20:00:00
 COMMAND=apple_hls
-#COMMAND=hls
-#COMMAND=youtube
 #REMARK=Don't place comments after settings, its a very basic parsing script.
 
 
