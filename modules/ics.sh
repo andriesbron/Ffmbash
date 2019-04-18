@@ -14,6 +14,12 @@
 # along with Ffmbash.  If not, see <http://www.gnu.org/licenses/>.
 
 
+#! Pointer variables (variables to be used in the file that includes this module)
+ICS_P_LIVENOW=false                   #! Indicates if a stream has to start right now based on ics format. "POINTER" is written in ics.sh module.
+ICS_P_DURATION="00:00:00"             #! Duration of the stream when ics started. "POINTER" is written in ics.sh module.
+ICS_P_EVENT_PASSED=false
+ICS_P_NEXT_EVENT_DUE=""
+
 function convertsecs() {
     ((h=${1}/3600))
     ((m=(${1}%3600)/60))
@@ -32,12 +38,12 @@ function parseicstimestamp {
         time_when_it_stops=$(( (end-now+60) )) #! Add a minute, because, I am a nice guy.
         #! Give the script the chance to relaunch as long as the program should go live.
         if [ $time_till_start -lt 120 ] && [ $time_when_it_stops -gt 0 ];then
-            POINTER_LIVENOW=true
+            ICS_P_LIVENOW=true
             #! Now set the duration of the livestream.
-            POINTER_DURATION=$(convertsecs $time_when_it_stops)
+            ICS_P_DURATION=$(convertsecs $time_when_it_stops)
         fi
         if [ $time_when_it_stops -lt 0 ]; then
-            POINTER_EVENT_PASSED=true
+            ICS_P_EVENT_PASSED=true
         fi
     else
         echo "No dtend is provided, cannot set automation."
@@ -76,7 +82,7 @@ function parseics {
             #! This has a detection span of 1 minute... that's not enough.
             if [[ ${dtstart} == *${now}* ]]; then
                 echo "LIVE NOW!"
-                POINTER_LIVENOW=true
+                ICS_P_LIVENOW=true
             fi
             
             case "$(date +%a)" in 
@@ -119,4 +125,34 @@ function something {
     content[${key%%";"*}]=$value
   fi
 done
+}
+
+#! @todo Make a better separation between ffmbash and this module.
+#! @desc Both dtstart and dtend must be set to enable automation.
+#! @param $1 string DTSTART
+#! @param $2 string DTEND
+#! @param $3 string RRULE
+#! @param $4 boolean ff_wait_for_date: if set, ics_run keeps running in a loop until the DTSTART event takes place.
+function ics_run {
+echo "wait "$4 " event passed: "$ICS_P_EVENT_PASSED
+echo 
+    if [ ! -z $1 ] && [ ! -z $2 ]; then   
+        if [ $4 = true ] && [ $ICS_P_EVENT_PASSED = false ]; then
+            #! if e.g. -w is set, then perform this in a loop until the stream has to start.
+            while [ $ICS_P_LIVENOW = false ]; do
+                echo "LIVE_NOW POINTER: "$ICS_P_LIVENOW
+                parseics http://localhost:8888/livestream.ics
+                #! Parsing timestamp given in the template file
+                parseicstimestamp $1 $2 $ff_rrule
+                sleep 3
+            done
+        fi
+        
+        #! If livenow, set the stream duration so that it automatically stops
+        if [ $ICS_P_EVENT_PASSED = true ]; then
+            echo "Event has passed, exiting..."
+            exit 0
+        fi
+
+    fi
 }
