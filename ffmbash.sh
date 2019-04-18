@@ -16,9 +16,9 @@ bold=$(tput bold)
 normal=$(tput sgr0)
 
 
-echo "WGET call:"
-content=$(wget http://localhost:8888/service.php -q -O -)
-echo $content
+#echo "WGET call:"
+#content=$(wget http://localhost:8888/service.php -q -O -)
+#echo $content
 
 
 #! Initialize ffmpeg variables:
@@ -35,6 +35,7 @@ output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that targ
 
 #! Initialize ffmbash items
 template_file=""
+ff_remote_tpl=""
 
 #! Initialize automation based on ics formats
 ff_dtstart=""                           #! Start time of a livestream for automation purposes. Not yet working.
@@ -46,14 +47,15 @@ function show_help {
 . modules/help.sh
 }
 
-while getopts "h?avc:t:o:r:w" opt; do
+while getopts "h?av:s:c:t:o:r:w" opt; do
     case "$opt" in
         h|\?)
         show_help
         exit 0
         ;;
         a)  autostart=1;;
-        v)  verbose=1;;
+        v)  ff_vdev=$OPTARG;;
+        s)  ff_adev=$OPTARG;;
         c)  ff_command=$OPTARG;;
         t)  template_file=$OPTARG;;
         o)  output_file=$OPTARG;;
@@ -79,6 +81,7 @@ if [ ! -z $template_file ]; then
             'VDEV') ff_vdev=$value;;
             'ADEVNAME') ff_adevname=$value;;
             'VDEVNAME') ff_vdevname=$value;;
+            'REMOTETPL') ff_remote_tpl=$value;;
 
             'DTSTART') ff_dtstart=$value;;
             'DTEND') ff_dtend=$value;;
