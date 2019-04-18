@@ -22,6 +22,8 @@ echo $content
 
 
 #! Initialize ffmpeg variables:
+ff_vdev=""
+ff_adev=""
 ff_screen_resolution=650x360
 ff_rootdir=videos
 ff_command=apple_hls                    #! Default command to be used.
@@ -31,17 +33,14 @@ ff_set_duration=""
 output_file=""
 output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that target a file
 
+#! Initialize ffmbash items
+template_file=""
+
 #! Initialize automation based on ics formats
 ff_dtstart=""                           #! Start time of a livestream for automation purposes. Not yet working.
 ff_dtend=""                             #! End time of a livestream for automation purposes. Not yet working, set ffmpeg streaming duration.
-ff_rrule=""                             #! Start time of a livestream for automation purposes. Not yet working.
+ff_rrule=" "                             #! Start time of a livestream for automation purposes. Not yet working.
 ff_wait_for_date=false
-POINTER_LIVENOW=false                   #! Indicates if a stream has to start right now based on ics format. "POINTER" is written in ics.sh module.
-POINTER_DURATION="00:00:00"             #! Duration of the stream when ics started. "POINTER" is written in ics.sh module.
-POINTER_EVENT_PASSED=false
-#! Initialize ffmbash items
-verbose=0
-template_file=""
 
 function show_help {
 . modules/help.sh
@@ -67,15 +66,12 @@ shift $((OPTIND-1))
 
 [ "${1:-}" = "--" ] && shift
 
-#echo "autostart=$autostart, verbose=$verbose, template_file='$template_file', output_file='$output_file', ff_fps=$ff_fps, Leftovers: $@"
-
-#if a template file is given, read the template and start if autostart is set.
+#if a template file is given, read the template and parse it.
 if [ ! -z $template_file ]; then
     SAVEIFS=IFS
     IFS="="
     while read -r name value
     do
-        #echo "Content of $name is ${value//\"/}"
         #! Due to lack of associative arrays:
         case "$name" in
             'AUTOSTART') ff_autostart=$value;;
@@ -107,7 +103,6 @@ if [ ! -z $template_file ]; then
         esac
     done < templates/$template_file.txt
     IFS=SAVEIFS
-
 fi
 
 #! Setting the devices
@@ -201,39 +196,18 @@ if [ -z $ffmbashfpsin ]; then
 fi
 
 
-
-#! Automation: Both dtstart and dtend must be set to enable automation.
-if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then
-    echo "I am in ics check"
-    #! Future use, check an ics file if the I should go live now, to automate camera's.
-    . modules/ics.sh
-
-    if [ $ff_wait_for_date = true ] && [ $POINTER_EVENT_PASSED = false ]; then
-        #! if e.g. -w is set, then perform this in a loop until the stream has to start.
-        while [ $POINTER_LIVENOW = false ]; do
-            echo "LIVE_NOW POINTER: "$POINTER_LIVENOW
-            parseics http://localhost:8888/livestream.ics
-            #! Parsing timestamp given in the template file
-            parseicstimestamp $ff_dtstart $ff_dtend $ff_rrule
-            sleep 3
-        done
-    fi
-    
-    #! If livenow, set the stream duration so that it automatically stops
-    if [ $POINTER_EVENT_PASSED = true ]; then
-        echo "Event has passed, exiting..."
-        exit 0
-    fi
-    #! If livenow, set the stream duration so that it automatically stops
-    if [ $POINTER_LIVENOW = true ]; then
-        ff_set_duration="-t "$POINTER_DURATION
-        ff_autostart=1
-    else
-        echo ""
-        echo "DTSTART event did not yet happen. If you want me to wait for it, set -w option or set WAITFORDTSTART=1 in template. "
-        echo ""
-        exit 0
-    fi
+#! Run ICS module
+. modules/ics.sh
+ics_run $ff_dtstart $ff_dtend $ff_rrule $ff_wait_for_date
+#! If livenow, set the stream duration so that it automatically stops
+if [ $ICS_P_LIVENOW = true ]; then
+    ff_set_duration="-t "$ICS_P_DURATION
+    ff_autostart=1
+else
+    echo ""
+    echo "DTSTART event did not yet happen. If you want me to wait for it, set -w option or set WAITFORDTSTART=1 in template. "
+    echo ""
+    exit 0
 fi
 
 
@@ -248,7 +222,7 @@ fi
 
 
 echo ""
-echo "${bold}Settings${normal}"
+echo "${bold}Ffmbash session settings${normal}"
 echo "Video device     : "$ff_vdev
 echo "Audio device     : "$ff_adev
 echo "Screen resolution: "$ff_screen_resolution
@@ -260,11 +234,11 @@ if [ ! -z $template_file ]; then
     echo "Start time       : "$ff_dtstart
     echo "End time         : "$ff_dtend
     echo "Rrule (not yet available): "$ff_rrule
-    echo "Start Live Now   : "$POINTER_LIVENOW
+    echo "Start Live Now   : "$ICS_P_LIVENOW
     #! If livenow, set the stream duration so that it automatically stops
     #! Variable is set before command is loaded :-)
-    if [ $POINTER_LIVENOW = true ]; then
-        echo "Program duration : "$POINTER_DURATION
+    if [ $ICS_P_LIVENOW = true ]; then
+        echo "Program duration : "$ICS_P_DURATION
     fi
 else
     echo "Start time       : Cannot be used command line (use template)."
