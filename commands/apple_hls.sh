@@ -14,4 +14,4 @@
 # along with Ffmbash.  If not, see <http://www.gnu.org/licenses/>.
 
 
-COMMAND="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${ff_vdev}:${ff_adev}\" -pix_fmt yuv420p -s ${ff_screen_resolution} -hls_flags round_durations -hls_time 3 -threads 25 -vcodec libx264 -ar 44100 -ab 128 -af aresample=async=1000 ${ff_set_duration} '${ff_rootdir}/${output_dir}/test.m3u8'"
+COMMAND="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${ff_vdev}:${ff_adev}\" -pix_fmt yuv420p -s ${ff_screen_resolution} -hls_flags round_durations -hls_time 3 -threads 25 -vcodec libx264 -ar 44100 -ab 128 -af aresample=async=1000 ${ff_set_duration} \"${ff_rootdir}/${output_dir}/test.m3u8\""
