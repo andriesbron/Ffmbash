@@ -21,22 +21,6 @@ The idea of Ffmbash is to handle the diversity of ffmpeg commands often required
 
 **Advice:** Test your configuration before relying on it. The point is, it's a prototype and prototypes always fail when they are demonstrated.
 
-## Overview Template Commands
-
-Below an overview of the template commands and their parameters. The corresponding command line option is also given. 
-
-| Template Command  | Command Line Option| Parameter       | Description |
-| ---               |   -----    |   ----------------------  | ----------- |
-|                   | -t [parameter]     | filename without extension  | Loads a command from the ```templates/``` directory |
-| COMMAND           | -c [parameter]     | filename without extension  | Loads a command from the ```commands/``` directory |
-| AUTOSTART | -a | [0,1] | Autostarts when all ffmpeg options are known, otherwise, you have to press enter before the command starts|
-| VDEV  | -v [parameter]| [0,..]       | The enumerated value of the video device |
-| ADEV  | -s [parameter]| [0,..]      | The enumerated value of the sound (audio) device |
-| DTSTART  |  | .ics date format       | Start time of the livestream (requires DTEND to be set as well) |
-| DTEND  |  | .ics date format       | End time of the livestream |
-| WAITFORDTSTART| -w | [0,1] | Puts ffmbash in a while loop until ```DTSTART``` event happens. |
-
-
 ## Concept Of Use And Defaults
 
 The concept of use is to load a template which then loads an ffmpeg command. The ffmpeg commands are stored in a ```.sh``` file in the commands directory. You can create your own commands in ```.sh``` files, store them in the commands directory and use them by loading them through a template or a command line option.
@@ -107,6 +91,22 @@ Type in the terminal:
 ```
 $ ./ffmbash.sh -h
 ```
+
+
+## Overview Template Commands
+
+Below an overview of the template commands and their parameters. The corresponding command line option is also given. 
+
+| Template Command  | Command Line Option| Parameter       | Description |
+| ---               |   -----    |   ----------------------  | ----------- |
+|                   | -t [parameter]     | filename without extension  | Loads a command from the ```templates/``` directory |
+| COMMAND           | -c [parameter]     | filename without extension  | Loads a command from the ```commands/``` directory |
+| AUTOSTART | -a | [0,1] | Autostarts when all ffmpeg options are known, otherwise, you have to press enter before the command starts|
+| VDEV  | -v [parameter]| [0,..]       | The enumerated value of the video device |
+| ADEV  | -s [parameter]| [0,..]      | The enumerated value of the sound (audio) device |
+| DTSTART  |  | .ics date format       | Start time of the livestream (requires DTEND to be set as well) |
+| DTEND  |  | .ics date format       | End time of the livestream |
+| WAITFORDTSTART| -w | [0,1] | Puts ffmbash in a while loop until ```DTSTART``` event happens. |
 
 
 # License
