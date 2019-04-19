@@ -13,4 +13,4 @@
 # You should have received a copy of the GNU General Public License
 # along with Ffmbash.  If not, see <http://www.gnu.org/licenses/>.
 
-COMMAND="${ffmbashfpsin} -f avfoundation -i \"${ff_vdev}:${ff_adev}\" -pix_fmt yuv420p -c:v libx264 -profile:v baseline -level 3.0 -r 24 -g 48 -keyint_min 48 -sc_threshold 0 -vb 310k -c:a mp3 -ab 40k -ar 44100 -ac 2 -f rtsp -muxdelay 0.1 rtsp://{$ff_rtsp_user_name}:{$ff_rtsp_user_password}@{$ff_rtsp_server_url}:{$ff_rtsp_server_port}/{$ff_rtsp_user_name}/{$ff_rtsp_key}"
+COMMAND="-r 30 -f avfoundation -i \"${ff_vdev}:${ff_adev}\" -pix_fmt yuv420p -c:v libx264 -profile:v baseline -level 3.0 -r 24 -g 48 -keyint_min 48 -sc_threshold 0 -vb 310k -c:a mp3 -ab 40k -ar 44100 -ac 2 -f rtsp -muxdelay 0.1 rtsp://${ff_rtsp_user_name}:${ff_rtsp_user_password}@${ff_rtsp_server_url}:${ff_rtsp_server_port}/${ff_rtsp_user_name}/${ff_rtsp_key}"
