@@ -20,14 +20,17 @@ ICS_P_DURATION="00:00:00"             #! Duration of the stream when ics started
 ICS_P_EVENT_PASSED=false
 ICS_P_NEXT_EVENT_DUE=""
 
-function convertsecs() {
+
+function convertsecs() 
+{
     ((h=${1}/3600))
     ((m=(${1}%3600)/60))
     ((s=${1}%60))
     printf "%02d:%02d:%02d\n" $h $m $s
 }
 
-function parseicstimestamp {
+function parseicstimestamp 
+{
     if [ ! -z $2 ]; then
         now=$(date +%s)
         #! This works: date -j -f "%d-%m-%YT%H:%M:%S" "21-02-2016T21:00:00" +%s
@@ -50,12 +53,12 @@ function parseicstimestamp {
     fi
 }
 
-function parseics {
+function parseics 
+{
     #! https://stackoverflow.com/questions/6497525/print-date-for-the-monday-of-the-current-week-in-bash#6497622
     #https://www.computerhope.com/unix/udate.htm
-
     #! @bug cannot get that calendar into a variable yet, downloading it and parse the file instead...
-    content=$(wget $1 -q -O calendars/livestream.ics)
+    content=$(wget $1 -q -O $1)
     # Read through the url.txt file and execute wget command for every filename
     startevent=false
     while IFS=':' read -r param value; do 
@@ -71,8 +74,6 @@ function parseics {
             now="$(date +%Y%m%dT%H%M)" #! Ignore seconds.
             #! now example:     20190414T210839 
             #! dtstart example: 20190414T090000
-
-            
             #https://stackoverflow.com/questions/47719681/calculate-date-time-difference-in-bash-on-macos
             end=$(date -j -f "%b %d %Y %H:%M:%S" "Dec 25 2017 08:00:00" +%s)
             now=$(date +%s)
@@ -84,7 +85,6 @@ function parseics {
                 echo "LIVE NOW!"
                 ICS_P_LIVENOW=true
             fi
-            
             case "$(date +%a)" in 
               Sat|Sun) echo "weekend";;
             esac
@@ -104,14 +104,13 @@ function parseics {
                 rrule=$value
                 rrule_par=$param
             fi
-        
         fi
-        
-    done < calendars/livestream.ics
+    done < $1 #calendars/livestream.ics
     return 1
 }
 
-function something {
+function something 
+{
     while IFS=: read -r key value; do
   value=${value%$'\r'} # remove DOS newlines
   if [[ $key = END && $value = VEVENT ]]; then
@@ -133,21 +132,24 @@ done
 #! @param $2 string DTEND
 #! @param $3 string RRULE
 #! @param $4 boolean ff_wait_for_date: if set, ics_run keeps running in a loop until the DTSTART event takes place.
-function ics_run {
+function ics_run 
+{
     if [ $4 = true ] && [ $ICS_P_EVENT_PASSED = false ]; then
         #! if e.g. -w is set, then perform this in a loop until the stream has to start.
         while [ $ICS_P_LIVENOW = false ]; do
-            echo "LIVE_NOW POINTER: "$ICS_P_LIVENOW
-            parseics http://localhost:8888/livestream.ics
+            #! Future use
+            #! wget http://localhost:8888/livestream.ics -q -O process/livestream.ics
+            #! parseics process/livestream.ics
             #! Parsing timestamp given in the template file
-            parseicstimestamp $1 $2 $ff_rrule
-            sleep 3
+            parseicstimestamp $1 $2 $3
+            if [ $ICS_P_EVENT_PASSED = true ]; then
+                echo ""
+                echo "Event has passed, adjust DTSTART and DTEND in template. Exiting ffmbash..."
+                echo ""
+                exit 0
+            else
+                sleep 3
+            fi
         done
-    fi
-    
-    #! If livenow, set the stream duration so that it automatically stops
-    if [ $ICS_P_EVENT_PASSED = true ]; then
-        echo "Event has passed, exiting..."
-        exit 0
     fi
 }
