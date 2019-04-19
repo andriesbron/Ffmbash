@@ -74,6 +74,14 @@ $ ./ffmbash.sh -t hls_auto_start
 ```
 load the ```hls_auto_start``` template (```templates/hls_auto_start.txt```) which contains a ```DTSTART``` and ```DTEND``` timestamp, additionally ```WAITFORDTSTART``` is set to "1" which causes ffmbash to remain in a loop until the ```DTSTART``` event occurs to start streaming.
 
+```WAITFORDTSTART``` overrules the command line option -w. So, you could have left ```WAITFORDTSTART``` out of the template and start the script by:
+
+```
+$ ./ffmbash.sh -t hls_auto_start -w
+```
+
+Which produces the same result.
+
 ### More help (not complete)
 
 Type in the terminal:
