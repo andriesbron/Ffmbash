@@ -15,13 +15,11 @@ The idea of Ffmbash is to handle the diversity of ffmpeg commands often required
 - Templates: Define templates to configure selected ffmpeg command (see templates directory).
 - Automation*: Planned start by adding a ```DTSTART``` and a ```DTEND``` item to a template.
 
-*) Automation is done by either letting the script wait for the ```DTSTART``` event to pass or using a cron job like method. The script calculates whether it is time to start the livestream (most early 2 minutes upfront ```DTSTART``` event). Take notice both ```DTSTART``` and ```DTEND``` have to be provided in the template to enable automation. If you want the script to wait until the ```DTSTART``` event happens, launch ffmbash with -w option or set ```WAITFORDTSTART=1``` in a template file.
+*) Automation is done by either letting the script wait for the ```DTSTART``` event to pass or using a cron job like method. The script calculates whether it is time to start the livestream (most early 2 minutes upfront ```DTSTART``` event). 
 
 **Attention:** Automation using a cronjob might suffer issue https://github.com/andriesbron/Ffmbash/issues/11 . working on it to solve that.
 
 **Advice:** Test your configuration before relying on it. The point is, it's a prototype and prototypes always fail when they are demonstrated.
-
-**Notice:** If you search for template and command syntax, please verify hls_file.txt and apple_hls.sh in resp. templates and commands directory. If you stick to what is used there, you should basically get it working.
 
 ## Overview Commands
 
@@ -31,12 +29,12 @@ Below an overview of the template commands and their parameters. The correspondi
 | ---               |   -----    |   ----------------------  | ----------- |
 |                   | -t [parameter]     | filename without extension  | Loads a command from the ```templates/``` directory |
 | COMMAND           | -c [parameter]     | filename without extension  | Loads a command from the ```commands/``` directory |
-| AUTOSTART | -a | 0 or 1 | Autostarts when all ffmpeg options are known, otherwise, you have to press enter before the command starts|
-| VDEV  | -v [parameter]| 0..n       | The enumerated value of the video device |
-| ADEV  | -s [parameter]| 0..n       | The enumerated value of the sound (audio) device |
+| AUTOSTART | -a | [0,1] | Autostarts when all ffmpeg options are known, otherwise, you have to press enter before the command starts|
+| VDEV  | -v [parameter]| [0,..]       | The enumerated value of the video device |
+| ADEV  | -s [parameter]| [0,..]      | The enumerated value of the sound (audio) device |
 | DTSTART  |  | .ics date format       | Start time of the livestream (requires DTEND to be set as well) |
 | DTEND  |  | .ics date format       | End time of the livestream |
-
+| WAITFORDTSTART| -w | [0,1] | Puts ffmbash in a while loop until ```DTSTART``` event happens. |
 
 
 ## Concept Of Use And Defaults
