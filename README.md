@@ -21,7 +21,7 @@ The idea of Ffmbash is to handle the diversity of ffmpeg commands often required
 
 **Advice:** Test your configuration before relying on it. The point is, it's a prototype and prototypes always fail when they are demonstrated.
 
-## Overview Commands
+## Overview Template Commands
 
 Below an overview of the template commands and their parameters. The corresponding command line option is also given. 
 
