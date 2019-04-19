@@ -29,9 +29,13 @@ Below an overview of the template commands and their parameters. The correspondi
 
 | Template Command  | Command Line Option| Parameter       | Description |
 | ---               |   -----    |   ----------------------  | ----------- |
-|                   | -t [parameter]     | filename without extension  | Loads a command from the ```templates/ directory``` |
+|                   | -t [parameter]     | filename without extension  | Loads a command from the ```templates/``` directory |
 | COMMAND           | -c [parameter]     | filename without extension  | Loads a command from the ```commands/``` directory |
 | AUTOSTART | -a | 0 or 1 | Autostarts when all ffmpeg options are known, otherwise, you have to press enter before the command starts|
+| VDEV  | -v [parameter]| 0..n       | The enumerated value of the video device |
+| ADEV  | -s [parameter]| 0..n       | The enumerated value of the sound (audio) device |
+| DTSTART  |  | .ics date format       | Start time of the livestream (requires DTEND to be set as well) |
+| DTEND  |  | .ics date format       | End time of the livestream |
 
 
 
