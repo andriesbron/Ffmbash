@@ -102,12 +102,18 @@ Below an overview of the template commands and their parameters. The correspondi
 |                   | -t [parameter]     | filename without extension  | Loads a command from the ```templates/``` directory |
 | COMMAND           | -c [parameter]     | filename without extension  | Loads a command from the ```commands/``` directory |
 | AUTOSTART | -a | [0,1] | Autostarts when all ffmpeg options are known, otherwise, you have to press enter before the command starts|
-| VDEV  | -v [parameter]| [0,..,n]       | The enumerated value of the video device |
-| ADEV  | -s [parameter]| [0,..,n]      | The enumerated value of the sound (audio) device |
+| VDEV  | -v [parameter] | [0,..,n]       | The enumerated value of the video device |
+| ADEV  | -s [parameter] | [0,..,n]      | The enumerated value of the sound (audio) device |
+| FPSIN | -r [parameter] | <0,..,n] | Input Framerate |
 | DTSTART  |  | .ics date format       | Start time of the livestream (requires DTEND to be set as well) |
 | DTEND  |  | .ics date format       | End time of the livestream |
 | WAITFORDTSTART| -w | [0,1] | Puts ffmbash in a while loop until ```DTSTART``` event happens. |
-
+| RTSP_USER_NAME |  | Rtsp username | In combination with ```rtsp``` template | 
+| RTSP_USER_PASSWORD |  | Rtsp password | In combination with ```rtsp``` template | 
+| RTSP_SERVER_URL |  | Rtsp url | In combination with ```rtsp``` template |
+| RTSP_SERVER_PORT |  | Rtsp url port | In combination with ```rtsp``` template | 
+| RTSP_KEY |  | Rtsp stream key  | In combination with ```rtsp``` template | 
+| YOUTUBE_KEY | | Youtube stream key | In combination with ```youtube``` template | 
 
 # License
 ```
