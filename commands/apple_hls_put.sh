@@ -14,4 +14,4 @@
 # along with Ffmbash.  If not, see <http://www.gnu.org/licenses/>.
 
 
-COMMAND="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${ff_vdev}:${ff_adev}\" -c:v libx264 -pix_fmt yuv420p -s 720x380 -start_number 0 -threads 25 -preset ultrafast -async 1 -hls_time 4 -hls_list_size 5 -use_localtime 1 -segment_format mpegts -hls_segment_filename 'http://localhost:8888/put/put.php?v=video-%s.ts' -f hls -method PUT 'http://localhost:8888/put/put.php?v=playlist.m3u8'"
+COMMAND="ffmpeg -y ${ffmbashfpsin} -f avfoundation -i \"${ff_vdev}:${ff_adev}\" -c:v libx264 -pix_fmt yuv420p -s 720x380 -start_number 0 -threads 25 -preset ultrafast -async 1 -hls_time 4 -hls_list_size 5 -use_localtime 1 -segment_format mpegts -hls_segment_filename 'http://localhost:8888/put/put.php?v=video-%s.ts' -f hls -method PUT \"http://localhost:8888/put/put.php?v=playlist.m3u8\""
