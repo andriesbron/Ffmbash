@@ -1,8 +1,10 @@
-REMARK=thisisuntested
+AUTOSTART=0
 VDEV=0
 ADEV=0
+FPSIN=30
 RTSP_USER_NAME=username
 RTSP_USER_PASSWORD=password
-RTSP_SERVER_URL=urltostreamto
-RTSP_SERVER_PORT=port
-RTSP_KEY=streamkey
+RTSP_SERVER_URL=rtspurl
+RTSP_SERVER_PORT=rtspport
+RTSP_KEY=rtspkey
+COMMAND=rtsp
