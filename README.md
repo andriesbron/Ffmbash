@@ -59,7 +59,7 @@ Loads the ```hls_file``` template by parsing ```templates/hls_file.txt``` into t
 ```
 $ ./ffmbash.sh -t hls_auto_start
 ```
-load the ```hls_auto_start``` template (```templates/hls_auto_start.txt```) which contains a ```DTSTART``` and ```DTEND``` timestamp, additionally ```WAITFORDTSTART``` is set to "1" which causes ffmbash to remain in a loop until the ```DTSTART``` event occurs to start streaming.
+Loads the ```hls_auto_start``` template (```templates/hls_auto_start.txt```) which contains a ```DTSTART``` and ```DTEND``` timestamp, additionally ```WAITFORDTSTART``` is set to "1" which causes ffmbash to remain in a loop until the ```DTSTART``` event occurs to start streaming.
 
 ```WAITFORDTSTART``` overrules the command line option -w. So, you could have left ```WAITFORDTSTART``` out of the template and start the script by:
 
@@ -102,8 +102,8 @@ Below an overview of the template commands and their parameters. The correspondi
 |                   | -t [parameter]     | filename without extension  | Loads a command from the ```templates/``` directory |
 | COMMAND           | -c [parameter]     | filename without extension  | Loads a command from the ```commands/``` directory |
 | AUTOSTART | -a | [0,1] | Autostarts when all ffmpeg options are known, otherwise, you have to press enter before the command starts|
-| VDEV  | -v [parameter]| [0,..]       | The enumerated value of the video device |
-| ADEV  | -s [parameter]| [0,..]      | The enumerated value of the sound (audio) device |
+| VDEV  | -v [parameter]| [0,..,n]       | The enumerated value of the video device |
+| ADEV  | -s [parameter]| [0,..,n]      | The enumerated value of the sound (audio) device |
 | DTSTART  |  | .ics date format       | Start time of the livestream (requires DTEND to be set as well) |
 | DTEND  |  | .ics date format       | End time of the livestream |
 | WAITFORDTSTART| -w | [0,1] | Puts ffmbash in a while loop until ```DTSTART``` event happens. |
