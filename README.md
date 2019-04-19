@@ -63,9 +63,6 @@ Therefore, the following command ```$ ./ffmbash.sh -t hls_file -c hls``` loads t
 
 
 ### Use a template file
-
-Type in the terminal:
-
 ```
 $ ./ffmbash.sh -t hls_file
 ```
