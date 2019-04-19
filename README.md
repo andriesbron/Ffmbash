@@ -9,10 +9,10 @@ User friendly bash script wrapper for livestreaming with ffmpeg (:bow:) on MacOS
 The idea of Ffmbash is to handle the diversity of ffmpeg commands often required for livestreaming or the generation of a proper media set. Ffmbash handles that through the use of a template file in combination with command line options. The command line options are secondary to the templates, meaning, only use it in case it helps in achieving what you want, otherwise, use a template. As a result only one command line option is important, ```-t``` succeeded by the template name which will be loaded from the ```templates/``` directory.
 
 ## Features
-- Manual: Handpick devices and framerate by launching the bare script: ```$ ./ffmbash```.
-- Command line options: Add command line options for loading templates or commands.
-- Ffmpeg commands: Define ffmpeg commands that can be selected command line or in templates (see command directory).
-- Templates: Define templates to configure selected ffmpeg command (see templates directory).
+- Livestream to Youtube using ```youtube``` template
+- Livestream to an RTSP account using ```rtsp``` template
+- Create your own templates, examples included
+- Create your own ffmpeg commands that can be used in templates
 - Automation*: Planned start by adding a ```DTSTART``` and a ```DTEND``` item to a template.
 
 *) Automation is done by either letting the script wait for the ```DTSTART``` event to pass or using a cron job like method. The script calculates whether it is time to start the livestream (most early 2 minutes upfront ```DTSTART``` event). 
@@ -45,9 +45,6 @@ Default the ```apple_hls``` command is loaded (see ```commands/apple_hls.sh```) 
 
 ## Examples of usage
 ### Guiding through options
-
-Type in the terminal:
-
 ```
 $ ./ffmbash.sh
 ```
@@ -55,9 +52,6 @@ Select the camera and audio device, if a framerate is required, select it, next 
 
 
 ### Use a particular command
-
-Type in the terminal:
-
 ```
 $ ./ffmbash.sh -c hls
 ```
@@ -79,10 +73,8 @@ Loads the ```hls_file``` template by parsing ```templates/hls_file.txt``` into t
 
 **Attention:** Template settings overrule command line options. If you want to use command line options in combination with a template, don't use the command line option in the template.
 
+
 ### Automate using DTSTART and DTEND timestamp
-
-Type in the terminal:
-
 ```
 $ ./ffmbash.sh -t hls_auto_start
 ```
@@ -95,6 +87,21 @@ $ ./ffmbash.sh -t hls_auto_start -w
 ```
 
 Which produces the same result.
+
+
+### Livestream to YOUTUBE
+```
+$ ./ffmbash.sh -t youtube
+```
+You should modify the youtube template in ```templates/youtube.txt``` with your personal youtube livestream key.
+
+
+### Livestream to an RTSP account
+```
+$ ./ffmbash.sh -t rtsp
+```
+You should modify the rtsp template in ```templates/rtsp.txt``` with your personal rtsp account settings.
+
 
 ### More help (not complete)
 
