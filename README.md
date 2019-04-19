@@ -5,6 +5,9 @@
 
 User friendly bash script wrapper for livestreaming with ffmpeg (:bow:) on MacOS.
 
+## Rationale
+The idea of Ffmbash is to handle the diversity of ffmpeg commands often required for livestreaming or the generation of a proper media set. Ffmbash handles that through the use of a template file in combination with command line options. The command line options are secondary to the templates, meaning, only use it in case it helps in achieving what you want, otherwise, use a template. As a result only one command line option is important, ```-t``` succeeded by the template name which will be loaded from the ```templates/``` directory.
+
 ## Features
 - Manual: Handpick devices and framerate by launching the bare script: ```$ ./ffmbash```.
 - Command line options: Add command line options for loading templates or commands.
@@ -23,7 +26,9 @@ User friendly bash script wrapper for livestreaming with ffmpeg (:bow:) on MacOS
 
 ## Concept Of Use And Defaults
 
-The concept of Ffmbash is that a ffmpeg command is loaded by the command line option ```-c command_name``` or by the ```COMMAND``` option in a template. The ffmpeg commands are stored in a ```.sh``` file in the commands directory. You can create your own commands in ```.sh``` files, store them in the commands directory and use them also via the command line option or in a template.
+@todo put a table with command line option versus template options, or other way around.
+
+The concept of use is that a ffmpeg command is loaded by the command line option ```-c command_name``` or by the ```COMMAND``` option in a template. The ffmpeg commands are stored in a ```.sh``` file in the commands directory. You can create your own commands in ```.sh``` files, store them in the commands directory and use them also via the command line option or in a template.
 
 Instead of command line options you can also load a template with options and load it via command line option ```-t template_name```. Using templates, you can do a few additional things, namely, automate the start of the livestream by defining a ```DTSTART``` time and a ```DTEND``` time according to .ics format.
 
