@@ -39,11 +39,7 @@ Below an overview of the template commands and their parameters. The correspondi
 
 ## Concept Of Use And Defaults
 
-@todo put a table with command line option versus template options, or other way around.
-
-The concept of use is that a ffmpeg command is loaded by the command line option ```-c command_name``` or by the ```COMMAND``` option in a template. The ffmpeg commands are stored in a ```.sh``` file in the commands directory. You can create your own commands in ```.sh``` files, store them in the commands directory and use them also via the command line option or in a template.
-
-Instead of command line options you can also load a template with options and load it via command line option ```-t template_name```. Using templates, you can do a few additional things, namely, automate the start of the livestream by defining a ```DTSTART``` time and a ```DTEND``` time according to .ics format.
+The concept of use is to load a template which then loads an ffmpeg command. The ffmpeg commands are stored in a ```.sh``` file in the commands directory. You can create your own commands in ```.sh``` files, store them in the commands directory and use them by loading them through a template or a command line option.
 
 Default the ```apple_hls``` command is loaded (see ```commands/apple_hls.sh```) and stores a video in a timestamp directory inside the videos directory.
 
