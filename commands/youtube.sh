@@ -19,16 +19,8 @@
 #@fahhu, to stream from webcam, set the SOURCE to this
 #SOURCE='/dev/video0'
 
-
-#! @todo fps must be a number apart from the string I create...
-
 VBR="2500k"                                    # Bitrate de la vidéo en sortie
-#FPS="30"                                       # FPS de la vidéo en sortie
 QUAL="medium"                                  # Preset de qualité FFMPEG
-YOUTUBE_URL="rtmp://a.rtmp.youtube.com/live2"  # URL de base RTMP youtube
 
-SOURCE="udp://239.255.139.0:1234"              # Source UDP (voir les annonces SAP)
-#YOUTUBE_KEY="...."                                     # Clé à récupérer sur l'event youtube
-
-COMMAND="-i \"${ff_vdev}:${ff_adev}\" -deinterlace -vcodec libx264 -pix_fmt yuv420p -preset $QUAL ${ffmbashfpsin} -g $(($ff_fps * 2)) -b:v $VBR -acodec libmp3lame -ar 44100 -threads 6 -qscale 3 -b:a 712000 -bufsize 512k -f flv '$YOUTUBE_URL/$YOUTUBE_KEY'"
+COMMAND="-i \"${ff_vdev}:${ff_adev}\" -deinterlace -vcodec libx264 -pix_fmt yuv420p -preset ${QUAL} ${ffmbashfpsin} -g $(($ff_fps * 2)) -b:v ${VBR} -acodec libmp3lame -ar 44100 -threads 6 -qscale 3 -b:a 712000 -bufsize 512k -f flv 'rtmp://a.rtmp.youtube.com/live2/${ff_yt_key}'"
 
