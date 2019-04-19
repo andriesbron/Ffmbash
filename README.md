@@ -10,11 +10,12 @@ User friendly bash script wrapper for livestreaming with ffmpeg (:bow:) on MacOS
 Ffmpeg (:bow:). What else?
 
 ## Rationale
-The idea of Ffmbash is to handle the diversity of ffmpeg commands often required for livestreaming or the generation of a proper media set. Ffmbash handles that complexity through the use of a template file in combination with command line options. The command line options are secondary to the templates, meaning, only use command line options in case it helps in achieving what you want, otherwise, use a template. As a result only one command line option is important, ```-t``` succeeded by the template name which will be loaded from the ```templates/``` directory.
+The idea of Ffmbash is to handle the diversity of ffmpeg (:bow:) commands often required for livestreaming or the generation of a proper media set. Ffmbash handles that complexity through the use of a template file in combination with command line options. The command line options are secondary to the templates, meaning, only use command line options in case it helps in achieving what you want, otherwise, use a template. As a result only one command line option is important, ```-t``` succeeded by the template name which will be loaded from the ```templates/``` directory.
 
 ## Features
 - Livestream to Youtube using ```youtube``` template
 - Livestream to an RTSP account using ```rtsp``` template
+- Livestream with putHLS script, see my putHLS repo. Does not require any livesteaming service but some knowledge on Apache httpd.conf and PHP to get it running.
 - Create your own templates, examples included
 - Create your own ffmpeg commands that can be used in templates
 - Automation*: Planned start by adding a ```DTSTART``` and a ```DTEND``` item to a template.
