@@ -34,9 +34,20 @@ output_file=""
 output_dir=$(date +%Y%m%dT%H%M%S)       #! Target directory of streams that target a file
 
 #! Initialize ffmbash items
+#! Templating
 template_file=""
 ff_remote_tpl=""
 
+#! Youtube
+ff_yt_key=""
+
+#! Rtsp
+ff_rtsp_user_name=""
+ff_rtsp_user_password=""
+ff_rtsp_server_url=""
+ff_rtsp_server_port=""
+ff_rtsp_key=""
+            
 #! Initialize automation based on ics formats
 ff_dtstart=""                           #! Start time of a livestream for automation purposes. Not yet working.
 ff_dtend=""                             #! End time of a livestream for automation purposes. Not yet working, set ffmpeg streaming duration.
@@ -79,7 +90,7 @@ if [ ! -z $template_file ]; then
             'VDEV') ff_vdev=$value;;
             'ADEVNAME') ff_adevname=$value;;
             'VDEVNAME') ff_vdevname=$value;;
-            'REMOTETPL') ff_remote_tpl=$value;;
+            'REMOTETPLURL') ff_remote_tpl_url=$value;;
 
             'DTSTART') ff_dtstart=$value;;
             'DTEND') ff_dtend=$value;;
@@ -93,6 +104,8 @@ if [ ! -z $template_file ]; then
             'FPSIN') ff_fps=$value;;
             'COMMAND') ff_command=$value;;
             'SCREENRES') ff_screen_resolution=$value;;
+            
+            'YOUTUBE_KEY') ff_yt_key=$value;;           
             
             'RTSP_USER_NAME') ff_rtsp_user_name=$value;;
             'RTSP_USER_PASSWORD') ff_rtsp_user_password=$value;;
@@ -200,10 +213,10 @@ fi
 #! Run ICS module
 . modules/ics.sh
 if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then 
-echo "Running ics"
     ics_run $ff_dtstart $ff_dtend $ff_rrule $ff_wait_for_date  
     #! If livenow, set the stream duration so that it automatically stops
     if [ $ICS_P_LIVENOW = true ]; then
+        #! If livenow, set the stream duration so that it automatically stops
         ff_set_duration="-t "$ICS_P_DURATION
         ff_autostart=1
     else
@@ -224,12 +237,13 @@ fi
 . commands/"$ff_command".sh
 
 
+#! Display all data and handle the final data from the ICS module.
 echo ""
 echo "${bold}Ffmbash session settings${normal}"
 echo "Video device     : "$ff_vdev
 echo "Audio device     : "$ff_adev
 echo "Screen resolution: "$ff_screen_resolution
-echo "Framerate        : "${ffmbashfpsin}
+echo "Framerate        : "$ff_fps
 echo "ffmpeg command   : "${ff_command}
 echo "${bold}Automated start${normal}"
 #! ICS support only through use of a template
@@ -238,13 +252,7 @@ if [ ! -z $template_file ]; then
     echo "End time         : "$ff_dtend
     echo "Rrule (not yet available): "$ff_rrule
     echo "Start Live Now   : "$ICS_P_LIVENOW
-    #! If livenow, set the stream duration so that it automatically stops
-    #! Variable is set before command is loaded :-)
-    if [ $ICS_P_LIVENOW = true ]; then
-        echo "Program duration : "$ICS_P_DURATION
-    fi
-else
-    echo "Start time       : Cannot be used command line (use template)."
+    echo "Program duration : "$ICS_P_DURATION
 fi
 echo "${bold}Ffmpeg command:${normal}"
 echo $COMMAND
@@ -255,3 +263,4 @@ if [ $ff_autostart -eq 0 ]; then
 fi
 
 eval $COMMAND
+
