@@ -15,6 +15,8 @@
 bold=$(tput bold)
 normal=$(tput sgr0)
 
+mkdir -p "process"                      #! For storing information on the running process.
+mkdir -p "videos"                       #! For storing video to disk.
 
 #echo "WGET call:"
 #content=$(wget http://localhost:8888/service.php -q -O -)
@@ -237,7 +239,7 @@ fi
 . commands/"$ff_command".sh
 
 
-#! Display all data and handle the final data from the ICS module.
+#! Display settings prior to start.
 echo ""
 echo "${bold}Ffmbash session settings${normal}"
 echo "Video device     : "$ff_vdev
@@ -248,19 +250,21 @@ echo "ffmpeg command   : "${ff_command}
 echo "${bold}Automated start${normal}"
 #! ICS support only through use of a template
 if [ ! -z $template_file ]; then
-    echo "Start time       : "$ff_dtstart
-    echo "End time         : "$ff_dtend
-    echo "Rrule (not yet available): "$ff_rrule
-    echo "Start Live Now   : "$ICS_P_LIVENOW
-    echo "Program duration : "$ICS_P_DURATION
+    if [ ! -z $ff_dtstart ] && [ ! -z $ff_dtend ]; then 
+        echo "Start time       : "$ff_dtstart
+        echo "End time         : "$ff_dtend
+        echo "Rrule (not yet available): "$ff_rrule
+        echo "Start Live Now   : "$ICS_P_LIVENOW
+        echo "Program duration : "$ICS_P_DURATION
+    fi
 fi
 echo "${bold}Ffmpeg command:${normal}"
 echo $COMMAND
 echo ""
+
 if [ $ff_autostart -eq 0 ]; then
     echo "Press <enter> to starting streaming. Once started, press enter <q> to quit."
     read startstreaming
 fi
-
 eval $COMMAND
 
