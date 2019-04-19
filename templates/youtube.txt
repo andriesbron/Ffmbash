@@ -1,4 +1,6 @@
-REMARK=thisisuntested
-YOUTUBE_KEY=abc
+AUTOSTART=0
+VDEV=0
+ADEV=0
+FPSIN=30
+YOUTUBE_KEY=myyoutubekey
 COMMAND=youtube
-
