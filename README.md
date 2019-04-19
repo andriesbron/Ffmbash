@@ -25,10 +25,13 @@ The idea of Ffmbash is to handle the diversity of ffmpeg commands often required
 
 ## Overview Commands
 
-| Template Command  | Command Line Optionn | Description |
-| -------------     |   -------------      | ----------- |
-| COMMAND           | -c                   | Loads a command from the commands/ directory|
-| AUTOSTART      | -a  | |
+Below an overview of the template commands and their parameters. The corresponding command line option is also given. 
+
+| Template Command  | Command Line Option| Parameter       | Description |
+| -------------     |   -------------    |   ------------  | ----------- |
+|                   | -t [parameter]     | filename without extension  | Loads a command from the ```templates/ directory``` |
+| COMMAND           | -c [parameter]     | filename without extension  | Loads a command from the ```commands/``` directory |
+| AUTOSTART | -a | 0 or 1 | Autostarts when all ffmpeg options are known, otherwise, you have to press enter before the command starts|
 
 
 
