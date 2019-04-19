@@ -109,6 +109,7 @@ Below an overview of the template commands and their parameters. The correspondi
 | VDEV  | -v [parameter] | [0,..,n]       | The enumerated value of the video device |
 | ADEV  | -s [parameter] | [0,..,n]      | The enumerated value of the sound (audio) device |
 | FPSIN | -r [parameter] | <0,..,n] | Input Framerate |
+| SCREENRES | | widthxheight | Screen resolution |
 | DTSTART  |  | .ics date format       | Start time of the livestream (requires DTEND to be set as well) |
 | DTEND  |  | .ics date format       | End time of the livestream |
 | WAITFORDTSTART| -w | [0,1] | Puts ffmbash in a while loop until ```DTSTART``` event happens. |
