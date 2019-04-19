@@ -26,5 +26,5 @@ VBR="2500k"                                    # Bitrate de la vidéo en sortie
 QUAL="medium"                                  # Preset de qualité FFMPEG
 #SOURCE="udp://239.255.139.0:1234"              # Source UDP (voir les annonces SAP)
 
-COMMAND="ffmpeg -i \"${ff_vdev}:${ff_adev}\" -deinterlace -vcodec libx264 -pix_fmt yuv420p -preset ${QUAL} ${ffmbashfpsin} -g $(($ff_fps * 2)) -b:v ${VBR} -acodec libmp3lame -ar 44100 -threads 6 -qscale 3 -b:a 712000 -bufsize 512k -f flv 'rtmp://a.rtmp.youtube.com/live2/${ff_yt_key}'"
+COMMAND="ffmpeg -i \"${ff_vdev}:${ff_adev}\" -deinterlace -vcodec libx264 -pix_fmt yuv420p -preset ${QUAL} ${ffmbashfpsin} -g $(($ff_fps * 2)) -b:v ${VBR} -acodec libmp3lame -ar 44100 -threads 6 -qscale 3 -b:a 712000 -bufsize 512k -f flv \"rtmp://a.rtmp.youtube.com/live2/${ff_yt_key}\""
 
