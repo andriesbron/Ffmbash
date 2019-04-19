@@ -23,6 +23,14 @@ The idea of Ffmbash is to handle the diversity of ffmpeg commands often required
 
 **Notice:** If you search for template and command syntax, please verify hls_file.txt and apple_hls.sh in resp. templates and commands directory. If you stick to what is used there, you should basically get it working.
 
+## Overview Commands
+
+| Template Command  | Command Line Optionn | Description |
+| -------------     |   -------------      | ----------- |
+| COMMAND           | -c                   | Loads a command from the commands/ directory|
+| AUTOSTART      | -a  | |
+
+
 
 ## Concept Of Use And Defaults
 
