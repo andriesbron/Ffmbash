@@ -15,7 +15,7 @@ The idea of Ffmbash is to handle the diversity of ffmpeg (:bow:) commands often 
 ## Features
 - Livestream to Youtube using ```youtube``` template
 - Livestream to an RTSP account using ```rtsp``` template
-- Livestream with putHLS script, see my putHLS repo. Does not require any livesteaming service but some knowledge on Apache httpd.conf and PHP to get it running.
+- Livestream with putHLS script, see my putHLS repo. Does not require any live streaming service but some knowledge on Apache httpd.conf and PHP to get it running.
 - Create your own templates, examples included
 - Create your own ffmpeg commands that can be used in templates
 - Automation*: Planned start by adding a ```DTSTART``` and a ```DTEND``` item to a template.
